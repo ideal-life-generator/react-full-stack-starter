@@ -1,7 +1,7 @@
 import React, { createElement } from 'react';
 import { IndexRoute, Route } from 'react-router';
 import App from './containers/App';
-import Main from './containers/Main';
+import Main, { title } from './containers/Main';
 import Users from './containers/Users';
 
 export default (

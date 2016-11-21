@@ -5,8 +5,6 @@ import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 
-@connect(({ title }) => ({ title }))
-
 export default class App extends Component {
   state = {
     open: false,
@@ -27,7 +25,7 @@ export default class App extends Component {
       state: { open },
       props: {
         children,
-        title,
+        children: { props: { route: { component: { title } } } },
       },
     } = this;
 
