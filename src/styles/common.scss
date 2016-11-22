@@ -1,3 +1,28 @@
+html {
+  font-family: 'Roboto', sans-serif;
+  height: 100%;
+}
+
 body {
+  height: 100%;
   margin: 0px;
+}
+
+:global(
+  #app {
+    height: 100%;
+  }
+)
+
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.main {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
 }

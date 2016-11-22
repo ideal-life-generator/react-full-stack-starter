@@ -35,7 +35,7 @@ const config = {
   module: {
     loaders: [
       {
-        test: /\.js/,
+        test: /\.js$/,
         loader: 'babel',
         exclude: /node_modules/,
       },
@@ -43,10 +43,11 @@ const config = {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract(
           'style',
-          'css?modules&importLoaders=1&localIdentName=[hash:base64:5]',
+          'css?modules',
           'postcss',
           'sass'
         ),
+        exclude: /node_modules/,
       },
     ],
   },
