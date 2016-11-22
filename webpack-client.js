@@ -4,12 +4,13 @@ const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const InlineEnviromentVariablesPlugin = require('inline-environment-variables-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const base = require('./webpack-base');
 
 const { env: { NODE_ENV } } = process;
 
 const resolve = path.resolve;
 
-const config = {
+const config = merge.smart(base, {
   target: 'web',
   context: resolve('src'),
   entry: {
@@ -34,11 +35,6 @@ const config = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
-        loader: 'babel',
-        exclude: /node_modules/,
-      },
-      {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract(
           'style',
@@ -51,15 +47,18 @@ const config = {
     ],
   },
   plugins: [
-    new InlineEnviromentVariablesPlugin(['NODE_ENV']),
     new webpack.optimize.CommonsChunkPlugin('commons', 'commons.js'),
     new ExtractTextPlugin('styles.css'),
     new CopyWebpackPlugin([
       { from: 'index.html', to: 'index.html' },
     ]),
-    // new HtmlWebpackPlugin(),
+    new webpack.SourceMapDevToolPlugin({
+      // filename: '[file].map',
+      include: ['bundle.js'],
+      exclude: ['commons.js'],
+    }),
   ],
-};
+});
 
 if (NODE_ENV === 'development') {
   module.exports = merge.smart(config, {
@@ -72,39 +71,17 @@ if (NODE_ENV === 'development') {
       ],
     },
     plugins: [
-      new webpack.SourceMapDevToolPlugin({
-        // filename: '[file].map',
-        include: ['bundle.js'],
-        exclude: ['commons.js'],
-      }),
       new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoErrorsPlugin(),
     ],
     devServer: {
       port: 3000,
       hot: true,
       inline: true,
       historyApiFallback: true,
-      // proxy: {
-      //   '*': 'http://localhost:5000',
-      // },
     },
   });
 }
 
 if (NODE_ENV === 'production') {
-  module.exports = merge.smart(config, {
-    devtool: 'source-map',
-    plugins: [
-      new webpack.optimize.OccurenceOrderPlugin(),
-      new webpack.optimize.DedupePlugin(),
-      new webpack.optimize.UglifyJsPlugin({
-        compress: { warnings: false },
-        comments: false,
-        sourceMap: false,
-        mangle: true,
-        minimize: true
-      }),
-    ],
-  });
+  module.exports = config;
 }

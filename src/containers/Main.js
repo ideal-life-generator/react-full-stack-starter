@@ -7,7 +7,7 @@ export default class Main extends Component {
   render() {
     return (
       <section className={classes.main}>
-        <h1>Welcome to React Starter Kit.</h1>
+        <h1>Welcome to the React Starter Kit.</h1>
       </section>
     );
   }
