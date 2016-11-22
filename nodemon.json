@@ -1,7 +1,10 @@
 {
   "watch": [
-    "server/index.js",
-    "src/"
+    "server",
+    "src"
   ],
-  "ignore": []
+  "ignore": [],
+  "execMap": {
+    "wp": "webpack --config webpack-server.js"
+  }
 }

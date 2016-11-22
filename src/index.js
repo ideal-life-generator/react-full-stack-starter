@@ -7,7 +7,6 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import routes from './routes';
 import store from './store';
 import initTheme from '../src/theme';
-import './styles/common.scss';
 
 injectTapEventPlugin();
 
