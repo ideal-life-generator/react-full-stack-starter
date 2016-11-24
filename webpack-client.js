@@ -2,9 +2,12 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const InlineEnviromentVariablesPlugin = require('inline-environment-variables-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const autoprefixer = require('autoprefixer');
 const base = require('./webpack-base');
+
+// var info = autoprefixer({ browsers: ['last 2 version'] }).info();
+// console.log(info);
 
 const { env: { NODE_ENV } } = process;
 
@@ -15,12 +18,11 @@ const config = merge.smart(base, {
   context: resolve('src'),
   entry: {
     commons: [
-      'isomorphic-fetch',
       'react',
       'react-dom',
       'react-redux',
       'react-router',
-      'react-router-redux',
+      'react-tap-event-plugin',
       'redux',
       'redux-thunk',
     ],
@@ -36,19 +38,28 @@ const config = merge.smart(base, {
     loaders: [
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract(
+        exclude: /node_modules/,
+        loaders: [
           'style',
-          'css?modules',
+          'css?modules&localIdentName=[name]_[local]',
           'postcss',
           'sass'
-        ),
-        exclude: /node_modules/,
+        ],
       },
     ],
   },
+  // cssLoader: {
+  //   modules: false,
+  //   importLoaders: 1,
+  //   sourceMap: true,
+  //   localIdentName: '[name]_[local]_[hash:base64:5]',
+  // },
+  // sassLoader: {
+  //   sourceMap: true,
+  //   outputStyle: 'expanded',
+  // },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin('commons', 'commons.js'),
-    new ExtractTextPlugin('styles.css'),
     new CopyWebpackPlugin([
       { from: 'index.html', to: 'index.html' },
     ]),

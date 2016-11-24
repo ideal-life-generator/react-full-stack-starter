@@ -12,26 +12,12 @@ const resolve = path.resolve;
 const config = merge.smart(base, {
   target: 'node',
   context: resolve('./'),
-  entry: './server',
+  entry: './api',
   output: {
     path: resolve('dist'),
-    filename: 'server.js',
-  },
-  module: {
-    loaders: [
-      {
-        test: /\.scss$/,
-        exclude: /node_modules/,
-        loaders: [
-          'fake-style',
-          'css?modules&localIdentName=[name]_[local]',
-          'sass'
-        ],
-      },
-    ],
+    filename: 'api.js',
   },
   externals: [nodeExternals()],
-  devtool: 'source-map',
   plugins: [
     new webpack.BannerPlugin('require("source-map-support").install();', {
       raw: true,
@@ -44,10 +30,10 @@ if (NODE_ENV === 'development') {
   module.exports = merge.smart(config, {
     plugins: [
       new webpack.SourceMapDevToolPlugin({
-        include: ['server.js'],
+        include: ['api.js'],
       }),
       new WebpackShellPlugin({
-        onBuildEnd: ['nodemon dist/server.js'],
+        onBuildEnd: ['nodemon dist/api.js'],
       }),
     ],
   });

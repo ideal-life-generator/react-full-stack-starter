@@ -1,7 +1,8 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
-const InlineEnviromentVariablesPlugin = require('inline-environment-variables-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const InlineEnviromentVariablesPlugin = require('inline-environment-variables-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const { env: { NODE_ENV } } = process;
 
@@ -13,11 +14,16 @@ const config = {
         loader: 'babel',
         exclude: /node_modules/,
       },
+      {
+        test: /\.(png|svg)$/,
+        exclude: /node_modules/,
+        loader: 'file',
+      },
     ],
   },
   plugins: [
-    new InlineEnviromentVariablesPlugin(['NODE_ENV']),
     new CleanWebpackPlugin(['dist'], { 'verbose': false }),
+    new InlineEnviromentVariablesPlugin(['NODE_ENV']),
   ],
 };
 

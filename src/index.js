@@ -13,19 +13,20 @@ injectTapEventPlugin();
 const { location: { pathname, search, hash } } = window;
 const location = `${pathname}${search}${hash}`;
 
-match({ routes, location }, () => {
-  // const history = syncHistoryWithStore(browserHistory, store);
-  const theme = initTheme(navigator.userAgent);
+document.addEventListener('DOMContentLoaded', () => {
+  match({ routes, location }, () => {
+    const theme = initTheme(navigator.userAgent);
 
-  render(
-    <MuiThemeProvider muiTheme={theme}>
-      <Provider store={store}>
-        <Router
-          routes={routes}
-          history={browserHistory}
-        />
-      </Provider>
-    </MuiThemeProvider>,
-    document.getElementById('app'),
-  );
+    render(
+      <MuiThemeProvider muiTheme={theme}>
+        <Provider store={store}>
+          <Router
+            history={browserHistory}
+            routes={routes}
+          />
+        </Provider>
+      </MuiThemeProvider>,
+      document.getElementById('app'),
+    );
+  });
 });

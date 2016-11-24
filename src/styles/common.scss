@@ -1,18 +1,18 @@
-html {
-  font-family: 'Roboto', sans-serif;
-  height: 100%;
-}
+:global {
+  html {
+    font-family: 'Roboto', sans-serif;
+    height: 100%;
+  }
 
-body {
-  height: 100%;
-  margin: 0px;
-}
+  body {
+    height: 100%;
+    margin: 0px;
+  }
 
-:global(
   #app {
     height: 100%;
   }
-)
+}
 
 .root {
   display: flex;
@@ -23,6 +23,10 @@ body {
 .main {
   display: flex;
   flex-grow: 1;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  .mainImage {
+    width: 100px;
+  }
 }

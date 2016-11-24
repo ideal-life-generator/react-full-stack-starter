@@ -5,7 +5,8 @@
   "scripts": {
     "dev:client": "better-npm-run dev:client",
     "dev:server": "better-npm-run dev:server",
-    "dev": "parallelshell \"better-npm-run dev:client\" \"better-npm-run dev:server\"",
+    "dev:api": "better-npm-run dev:api",
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\" \"npm run dev:api\"",
     "prod": "better-npm-run prod"
   },
   "betterScripts": {
@@ -17,6 +18,12 @@
     },
     "dev:server": {
       "command": "webpack --watch --config webpack-server.js",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    "dev:api": {
+      "command": "webpack --watch --config webpack-api.js",
       "env": {
         "NODE_ENV": "development"
       }
@@ -47,6 +54,7 @@
   },
   "homepage": "https://github.com/ideal-life/modern-react-starter-kit#readme",
   "devDependencies": {
+    "autoprefixer": "^6.5.3",
     "babel-cli": "^6.18.0",
     "babel-core": "^6.18.2",
     "babel-eslint": "^7.1.1",
@@ -72,8 +80,11 @@
     "eslint-plugin-jsx-a11y": "^3.0.1",
     "eslint-plugin-react": "^6.7.1",
     "extract-text-webpack-plugin": "^1.0.1",
+    "fake-style-loader": "^1.0.1",
+    "file-loader": "^0.9.0",
     "ignore-loader": "^0.1.2",
     "inline-environment-variables-webpack-plugin": "^1.1.0",
+    "isomorphic-style-loader": "^1.1.0",
     "material-ui": "^0.16.4",
     "node-sass": "^3.13.0",
     "nodemon": "^1.11.0",
@@ -89,22 +100,23 @@
     "style-loader": "^0.13.1",
     "webpack": "^1.13.3",
     "webpack-dev-server": "^1.16.2",
-    "webpack-merge": "^0.17.0"
+    "webpack-isomorphic-tools": "^2.6.4",
+    "webpack-merge": "^0.17.0",
+    "webpack-node-externals": "^1.5.4",
+    "webpack-shell-plugin": "^0.4.3"
   },
   "dependencies": {
     "compression": "^1.6.2",
     "cors": "^2.8.1",
     "express": "^4.14.0",
-    "isomorphic-fetch": "^2.2.1",
     "mongoose": "^4.6.8",
     "react": "^15.4.0",
     "react-dom": "^15.4.0",
     "react-redux": "^4.4.6",
     "react-router": "^3.0.0",
-    "react-router-redux": "^4.0.7",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
-    "webpack-shell-plugin": "^0.4.3"
+    "universal-webpack": "^0.1.41"
   }
 }
