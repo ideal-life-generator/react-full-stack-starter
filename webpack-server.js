@@ -16,6 +16,7 @@ const config = merge.smart(base, {
   output: {
     path: resolve('dist'),
     filename: 'server.js',
+    sourceMapFilename: 'server.js.map',
   },
   module: {
     loaders: [
@@ -23,9 +24,9 @@ const config = merge.smart(base, {
         test: /\.scss$/,
         exclude: /node_modules/,
         loaders: [
-          'fake-style',
-          'css?modules&localIdentName=[name]_[local]',
-          'sass'
+          'fake-style-loader',
+          'css-loader?modules&localIdentName=[name]_[local]',
+          'sass-loader',
         ],
       },
     ],
@@ -33,21 +34,23 @@ const config = merge.smart(base, {
   externals: [nodeExternals()],
   devtool: 'source-map',
   plugins: [
-    new webpack.BannerPlugin('require("source-map-support").install();', {
-      raw: true,
-      entryOnly: false,
-    }),
+    // new webpack.SourceMapDevToolPlugin({
+    //   module: true,
+    //   columns: true,
+    //   lineToLine: true,
+    // }),
+    // new webpack.BannerPlugin('require("source-map-support").install();', {
+    //   raw: true,
+    //   entryOnly: false,
+    // }),
   ],
 });
 
 if (NODE_ENV === 'development') {
   module.exports = merge.smart(config, {
     plugins: [
-      new webpack.SourceMapDevToolPlugin({
-        include: ['server.js'],
-      }),
       new WebpackShellPlugin({
-        onBuildEnd: ['nodemon dist/server.js'],
+        onBuildEnd: ['node dist/server.js'],
       }),
     ],
   });

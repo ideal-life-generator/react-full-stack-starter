@@ -3,9 +3,13 @@ import users from '../database/users';
 export function GET() {
   return new Promise(async (resolve, reject) => {
     try {
-      const usersResult = await users.find();
+      const collection = await users.find();
 
-      resolve(usersResult);
+      const result = {
+        collection,
+      };
+
+      resolve(result);
     } catch (error) {
       reject(error);
     }

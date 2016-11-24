@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import callAPIMiddleware from './utils/callAPIMiddleware';
-import reducers from './reducers';
+import fetchMiddleware from './modules/utils/fetchMiddleware';
+import reducers from './modules';
 
 function getInitialState() {
   if (typeof window !== 'undefined') {
@@ -16,17 +16,17 @@ function getInitialState() {
 export default createStore(
   reducers,
   getInitialState(),
-  compose(
+  // compose(
     applyMiddleware(
-      thunk,
-      callAPIMiddleware
+      // thunk,
+      fetchMiddleware,
     ),
-  )
+  // ),
 );
 
 if (module.hot) {
-  module.hot.accept('./reducers', () => {
-    const newReducers = require('./reducers/index').default;
+  module.hot.accept('./modules', () => {
+    const newReducers = require('./modules').default;
 
     store.replaceReducer(newReducers);
   });

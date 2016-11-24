@@ -45,7 +45,7 @@ app.use(async ({ url, method }, res, next) => {
 
       res.send(actionResult);
     } catch (error) {
-      res.status(400).end(error.message);
+      res.status(400).send(error.message);
     }
   } else {
     res.status(404).end('Not found.');

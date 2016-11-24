@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import createSong from './createSong';
+import users from './users';
 
 export default combineReducers({
-  createSong,
+  users,
 });

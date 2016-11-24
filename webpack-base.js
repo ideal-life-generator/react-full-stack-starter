@@ -11,13 +11,13 @@ const config = {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel',
+        loader: 'babel-loader',
         exclude: /node_modules/,
       },
       {
         test: /\.(png|svg)$/,
         exclude: /node_modules/,
-        loader: 'file',
+        loader: 'file-loader',
       },
     ],
   },
@@ -30,7 +30,7 @@ const config = {
 if (NODE_ENV === 'development') {
   module.exports = merge.smart(config, {
     plugins: [
-      new webpack.NoErrorsPlugin(),
+      // new webpack.NoErrorsPlugin(),
     ],
   });
 }

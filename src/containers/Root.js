@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
-import classes from '../styles/common.scss';
+import styles from '../styles/common.scss';
 
 export default class App extends Component {
   state = {
@@ -31,7 +31,7 @@ export default class App extends Component {
     } = this;
 
     return (
-      <div className={classes.root}>
+      <div className={styles.root}>
         <AppBar
           title={title}
           onLeftIconButtonTouchTap={handleOpen}
@@ -45,7 +45,7 @@ export default class App extends Component {
             containerElement={<Link to="/" />}
             onTouchTap={handleClose}
           >
-            Main
+            Home
           </MenuItem>
           <MenuItem
             containerElement={<Link to="/users" />}

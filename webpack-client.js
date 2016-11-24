@@ -18,6 +18,7 @@ const config = merge.smart(base, {
   context: resolve('src'),
   entry: {
     commons: [
+      'axios',
       'react',
       'react-dom',
       'react-redux',

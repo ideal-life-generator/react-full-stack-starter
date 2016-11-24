@@ -26,7 +26,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  .mainImage {
-    width: 100px;
+  .greeting {
+    display: flex;
+    justify-content: center;
+    .mainImage {
+      position: absolute;
+      width: 100px;
+      transform: translateY(-100%);
+    }
   }
 }
