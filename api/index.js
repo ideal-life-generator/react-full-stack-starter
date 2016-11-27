@@ -1,7 +1,8 @@
 import express from 'express';
 import compression from 'compression';
 import cors from 'cors';
-import * as actions from './actions';
+import findHandler from './utils/find-handler';
+import * as queries from './queries';
 
 const { env: { NODE_ENV } } = process;
 
@@ -10,40 +11,14 @@ const app = express();
 app.use(compression());
 app.use(cors());
 
-function removeSlash(url) {
-  const isStartedFromSlash = url.indexOf('/') === 0;
-
-  if (isStartedFromSlash) {
-    const withoutSlash = url.slice(1);
-
-    return withoutSlash;
-  } else {
-    return url;
-  }
-}
-
-function findAction(actions, url, method) {
-  const urlWithoutSlash = removeSlash(url);
-
-  if (urlWithoutSlash) {
-    const actionMethods = actions[urlWithoutSlash];
-
-    if (actionMethods) {
-      const action = actionMethods[method];
-
-      return action;
-    }
-  }
-};
-
 app.use(async ({ url, method }, res, next) => {
-  const action = findAction(actions, url, method);
+  const handler = findHandler(queries, url, method);
 
-  if (action) {
+  if (handler) {
     try {
-      const actionResult = await action();
+      const result = await handler();
 
-      res.send(actionResult);
+      res.send(result);
     } catch (error) {
       res.status(400).send(error.message);
     }

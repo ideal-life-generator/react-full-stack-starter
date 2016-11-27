@@ -1,23 +1,24 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, browserHistory, match } from 'react-router';
+import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
+import { Router, browserHistory, match } from 'react-router';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import routes from './routes';
-import store from './store';
 import initTheme from '../src/theme';
+import initStore from './store';
+import routes from './routes';
+
+const { env: { NODE_ENV, RENDERING_ON } } = process;
 
 injectTapEventPlugin();
 
-const { location: { pathname, search, hash } } = window;
-const location = `${pathname}${search}${hash}`;
+const theme = initTheme(navigator.userAgent);
+const store = initStore(window.INITIAL_STATE);
 
-document.addEventListener('DOMContentLoaded', () => {
-  match({ routes, location }, () => {
-    const theme = initTheme(navigator.userAgent);
-
-    render(
+function renderApp() {
+  render(
+    <AppContainer>
       <MuiThemeProvider muiTheme={theme}>
         <Provider store={store}>
           <Router
@@ -25,8 +26,22 @@ document.addEventListener('DOMContentLoaded', () => {
             routes={routes}
           />
         </Provider>
-      </MuiThemeProvider>,
-      document.getElementById('app'),
-    );
-  });
+      </MuiThemeProvider>
+    </AppContainer>,
+    document.getElementById('app'),
+  );
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderApp();
 });
+
+if (NODE_ENV === 'development' && RENDERING_ON === 'browser') {
+  if (module.hot) {
+    module.hot.accept('./routes', () => {
+      require('./routes');
+
+      renderApp();
+    });
+  }
+}

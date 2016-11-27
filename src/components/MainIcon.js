@@ -1,7 +1,7 @@
 import React from 'react' ;
 import SvgIcon from 'material-ui/SvgIcon';
 
-export default function VerifiedIcon(props) {
+export default function MainIcon(props) {
   return (
     <SvgIcon {...props}>
       <path d="M0 0h24v24H0z" fill="none" />

@@ -1,31 +1,35 @@
-import React, { Component, cloneElement } from 'react';
-import { Link } from 'react-router';
+import React, { Component } from 'react'
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
+import DevTools from '../containers/DevTools';
+import MainMenuItem from '../components/MainMenuItem';
+import { open, close } from '../reducers/main-menu';
 import styles from '../styles/common.scss';
 
-export default class App extends Component {
-  state = {
-    open: false,
-  };
+const { env: { NODE_ENV, RENDERING_ON } } = process;
 
-  handleOpen = () => {
-    this.setState({ open: true });
-  };
+@connect(({ mainMenu }) => ({ mainMenu }), (dispatch) => bindActionCreators({ open, close }, dispatch))
 
-  handleClose = () => {
-    this.setState({ open: false });
+export default class Root extends Component {
+  static defaultProps = {
+    linksSettings: [
+      { to: '/', description: 'Home' },
+      { to: '/users', description: 'Users' },
+      { to: '/login', description: 'Login' },
+      { to: '/signup', description: 'Signup' },
+    ],
   };
 
   render() {
     const {
-      handleOpen,
-      handleClose,
-      state: { open },
       props: {
         children,
+        open,
+        close,
+        mainMenu,
+        linksSettings,
         children: { props: { route: { component: { title } } } },
       },
     } = this;
@@ -34,27 +38,17 @@ export default class App extends Component {
       <div className={styles.root}>
         <AppBar
           title={title}
-          onLeftIconButtonTouchTap={handleOpen}
+          onLeftIconButtonTouchTap={open}
         />
         <Drawer
-          open={open}
-          onRequestChange={handleClose}
+          open={mainMenu}
+          onRequestChange={close}
           docked={false}
         >
-          <MenuItem
-            containerElement={<Link to="/" />}
-            onTouchTap={handleClose}
-          >
-            Home
-          </MenuItem>
-          <MenuItem
-            containerElement={<Link to="/users" />}
-            onTouchTap={handleClose}
-          >
-            Users
-          </MenuItem>
+          {linksSettings.map((linkSettings, index) => (<MainMenuItem key={index} {...linkSettings} onTouchTap={close} />))}
         </Drawer>
         {children}
+        {NODE_ENV === 'development' && RENDERING_ON === 'browser' && <DevTools />}
       </div>
     );
   }

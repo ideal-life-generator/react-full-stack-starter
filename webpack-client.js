@@ -1,89 +1,31 @@
-const path = require('path');
-const webpack = require('webpack');
-const merge = require('webpack-merge');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const autoprefixer = require('autoprefixer');
-const base = require('./webpack-base');
-
-// var info = autoprefixer({ browsers: ['last 2 version'] }).info();
-// console.log(info);
+const { HotModuleReplacementPlugin } = require('webpack');
+const { smart, smartStrategy } = require('webpack-merge');
+const { client } = require('./webpack-base');
 
 const { env: { NODE_ENV } } = process;
 
-const resolve = path.resolve;
-
-const config = merge.smart(base, {
-  target: 'web',
-  context: resolve('src'),
-  entry: {
-    commons: [
-      'axios',
-      'react',
-      'react-dom',
-      'react-redux',
-      'react-router',
-      'react-tap-event-plugin',
-      'redux',
-      'redux-thunk',
-    ],
-    bundle: './index',
-  },
-  output: {
-    path: resolve('dist'),
-    // publicPath: '/dist/',
-    // filename: '[name].js',
-    // sourceMapFilename: "[name].js.map",
-  },
-  module: {
-    loaders: [
-      {
-        test: /\.scss$/,
-        exclude: /node_modules/,
-        loaders: [
-          'style',
-          'css?modules&localIdentName=[name]_[local]',
-          'postcss',
-          'sass'
-        ],
-      },
-    ],
-  },
-  // cssLoader: {
-  //   modules: false,
-  //   importLoaders: 1,
-  //   sourceMap: true,
-  //   localIdentName: '[name]_[local]_[hash:base64:5]',
-  // },
-  // sassLoader: {
-  //   sourceMap: true,
-  //   outputStyle: 'expanded',
-  // },
-  plugins: [
-    new webpack.optimize.CommonsChunkPlugin('commons', 'commons.js'),
-    new CopyWebpackPlugin([
-      { from: 'index.html', to: 'index.html' },
-    ]),
-    new webpack.SourceMapDevToolPlugin({
-      // filename: '[file].map',
-      include: ['bundle.js'],
-      exclude: ['commons.js'],
-    }),
-  ],
-});
-
 if (NODE_ENV === 'development') {
-  module.exports = merge.smart(config, {
+  module.exports = smartStrategy({
+    'entry.packages': 'prepend',
+  })(client, {
     entry: {
-      commons: [
-        // 'redux-devtools',
-        // 'redux-devtools-log-monitor',
-        // 'redux-devtools-dock-monitor',
-        // 'containers/DevTools',
+      packages: [
+        'react-hot-loader/patch',
+        'redux-devtools',
+        'redux-devtools-dock-monitor',
+        'redux-devtools-log-monitor',
+      ],
+    },
+    module: {
+      loaders: [
+        {
+          test: /\.js$/,
+          loaders: ['react-hot-loader/webpack'],
+        },
       ],
     },
     plugins: [
-      new webpack.HotModuleReplacementPlugin(),
+      new HotModuleReplacementPlugin(),
     ],
     devServer: {
       port: 3000,
@@ -95,5 +37,5 @@ if (NODE_ENV === 'development') {
 }
 
 if (NODE_ENV === 'production') {
-  module.exports = config;
+  module.exports = smart(client, {});
 }

@@ -19,20 +19,3 @@
   flex-direction: column;
   height: 100%;
 }
-
-.main {
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  .greeting {
-    display: flex;
-    justify-content: center;
-    .mainImage {
-      position: absolute;
-      width: 100px;
-      transform: translateY(-100%);
-    }
-  }
-}

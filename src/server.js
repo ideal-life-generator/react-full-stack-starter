@@ -1,8 +1,8 @@
-import path from 'path';
+import { resolve } from 'path';
+import httpProxy from 'http-proxy';
 import express from 'express';
 import compression from 'compression';
 import cors from 'cors';
-import httpProxy from 'http-proxy';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { match, RouterContext } from 'react-router';
@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import routes from '../src/routes';
-import store from '../src/store';
+import initStore from '../src/store';
 import initTheme from '../src/theme';
 
 const { env: { NODE_ENV } } = process;
@@ -19,7 +19,7 @@ const app = express();
 
 app.use(compression());
 app.use(cors());
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(resolve('dist')));
 
 injectTapEventPlugin();
 
@@ -29,7 +29,7 @@ function renderPage(appHtml, initialState) {
     <html>
       <head>
         <meta charset="utf-8" />
-        <title>React Starter Kit</title>
+        <title>React Full Stack Starter</title>
         <script>
           window.INITIAL_STATE = ${JSON.stringify(initialState)};
         </script>
@@ -44,6 +44,7 @@ function renderPage(appHtml, initialState) {
 }
 
 app.get('*', (req, res, next) => {
+  const store = initStore();
   const initialState = store.getState();
 
   match({ routes, location: req.url }, (err, redirect, props) => {
@@ -68,14 +69,6 @@ app.get('*', (req, res, next) => {
     }
   });
 });
-
-if (NODE_ENV === 'development') {
-  const proxy = httpProxy.createProxyServer({ target: 'http://localhost:3000' });
-  
-  app.get('*', (req, res) => {
-    proxy.web(req, res);
-  });
-};
 
 app.listen(5000, () => {
   console.log(`Rendering server is listen on ${5000} port in ${NODE_ENV} mode.`);

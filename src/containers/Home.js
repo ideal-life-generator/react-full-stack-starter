@@ -1,6 +1,7 @@
 import React, { Component } from 'react' ;
-import classes from '../styles/common.scss';
-import reactIcon from '../images/react-icons.svg';
+import MainIcon from '../components/MainIcon';
+import { primary1Color } from '../theme';
+import classes from '../styles/home.scss';
 
 export default class Home extends Component {
   static title = 'Home';
@@ -9,8 +10,8 @@ export default class Home extends Component {
     return (
       <section className={classes.main}>
         <div className={classes.greeting}>
-          <img className={classes.mainImage} src={reactIcon} />
-          <h1>Welcome to the React Starter Kit.</h1>
+        <MainIcon className={classes.icon} color={primary1Color} />
+          <h1>Welcome to the React Full Stack Starter</h1>
         </div>
       </section>
     );

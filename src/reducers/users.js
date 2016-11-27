@@ -1,6 +1,5 @@
 import axios from './utils/axios';
 import createReducer from './utils/createReducer';
-import makeActionCreator from './utils/makeActionCreator';
 
 const REQUEST_USERS = 'REQUEST_USERS';
 const USERS_SUCCESS_RESPONSE = 'USERS_SUCCESS_RESPONSE';
@@ -11,7 +10,7 @@ export function load() {
     types: [REQUEST_USERS, USERS_SUCCESS_RESPONSE, USERS_RESPONSE_FAILURE],
     fetch: async () => {
       try {
-        const { data } = await axios('/users');
+        const { data } = await axios('users');
 
         return data;
       } catch (error) {

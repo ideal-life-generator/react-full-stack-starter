@@ -6,40 +6,27 @@
     "dev:client": "better-npm-run dev:client",
     "dev:server": "better-npm-run dev:server",
     "dev:api": "better-npm-run dev:api",
-    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\" \"npm run dev:api\"",
-    "prod": "better-npm-run prod"
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\" \"npm run dev:api\""
   },
   "betterScripts": {
     "dev:client": {
       "command": "webpack-dev-server --config webpack-client.js",
       "env": {
-        "NODE_ENV": "development"
+        "NODE_ENV": "development",
+        "RENDERING_ON": "browser"
       }
     },
     "dev:server": {
-      "command": "webpack --watch --config webpack-server.js",
+      "command": "webpack --watch --config webpack-server.js --display-modules --display-chunks",
       "env": {
-        "NODE_ENV": "development"
+        "NODE_ENV": "development",
+        "RENDERING_ON": "server"
       }
     },
     "dev:api": {
-      "command": "webpack --watch --config webpack-api.js",
+      "command": "webpack --watch --config webpack-api.js --display-modules --display-chunks",
       "env": {
         "NODE_ENV": "development"
-      }
-    },
-    "prod": {
-      "command": "webpack",
-      "env": {
-        "NODE_ENV": "production",
-        "TARGET": "browser"
-      }
-    },
-    "prod:server": {
-      "command": "webpack --config webpack.config.serv.js",
-      "env": {
-        "NODE_ENV": "production",
-        "TARGET": "server"
       }
     }
   },
@@ -54,7 +41,6 @@
   },
   "homepage": "https://github.com/ideal-life/modern-react-starter-kit#readme",
   "devDependencies": {
-    "autoprefixer": "^6.5.3",
     "babel-cli": "^6.18.0",
     "babel-core": "^6.18.2",
     "babel-eslint": "^7.1.1",
@@ -82,27 +68,18 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "fake-style-loader": "^1.0.1",
     "file-loader": "^0.9.0",
-    "ignore-loader": "^0.1.2",
-    "inline-environment-variables-webpack-plugin": "^1.1.0",
-    "isomorphic-style-loader": "^1.1.0",
-    "material-ui": "^0.16.4",
     "node-sass": "^3.13.0",
     "nodemon": "^1.11.0",
-    "parallelshell": "^2.0.0",
     "postcss-loader": "^1.1.1",
     "react-hot-loader": "^3.0.0-beta.6",
     "redux-devtools": "^3.3.1",
     "redux-devtools-dock-monitor": "^1.1.1",
     "redux-devtools-log-monitor": "^1.1.1",
     "sass-loader": "^4.0.2",
-    "source-map-loader": "^0.1.5",
-    "source-map-support": "^0.4.6",
-    "sri-stats-webpack-plugin": "^0.7.3",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.3",
     "webpack-dev-server": "^1.16.2",
-    "webpack-isomorphic-tools": "^2.6.4",
-    "webpack-merge": "^0.18.0",
+    "webpack-merge": "^0.19.0",
     "webpack-node-externals": "^1.5.4",
     "webpack-shell-plugin": "^0.4.3"
   },
@@ -111,6 +88,7 @@
     "compression": "^1.6.2",
     "cors": "^2.8.1",
     "express": "^4.14.0",
+    "material-ui": "^0.16.4",
     "mongoose": "^4.7.0",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
@@ -118,7 +96,7 @@
     "react-router": "^3.0.0",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
-    "redux-thunk": "^2.1.0",
-    "universal-webpack": "^0.1.41"
+    "redux-form": "^6.2.0",
+    "redux-thunk": "^2.1.0"
   }
 }
