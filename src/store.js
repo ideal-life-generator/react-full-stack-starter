@@ -6,7 +6,7 @@ import reducers from './reducers';
 const { env: { NODE_ENV, RENDERING_ON } } = process;
 
 function generateCompose(middlewares) {
-  if (NODE_ENV === 'development' && RENDERING_ON === 'browser') {
+  if (NODE_ENV === 'development' && RENDERING_ON === 'client') {
     const DevTools = require('./containers/DevTools').default;
 
     return compose(
@@ -32,7 +32,7 @@ export default (initialState = {}) => {
     ),
   );
 
-  if (NODE_ENV === 'development' && RENDERING_ON === 'browser') {
+  if (NODE_ENV === 'development' && RENDERING_ON === 'client') {
     if (module.hot) {
       module.hot.accept('./reducers', () => {
         const nextReducers = require('./reducers').default;

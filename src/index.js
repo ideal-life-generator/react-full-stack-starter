@@ -24,7 +24,7 @@ function renderApp() {
   );
 }
 
-if (NODE_ENV === 'development' && RENDERING_ON === 'browser') {
+if (NODE_ENV === 'development' && RENDERING_ON === 'client') {
   if (module.hot) {
     module.hot.accept('./routes', () => {
       require('./routes');

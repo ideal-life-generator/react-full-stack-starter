@@ -38,12 +38,14 @@ export default class Signup extends Component {
       <section className={styles.signup}>
         <form className={styles.form}>
           <Field
+            id="signup-name"
             name="name"
             hintText="Name"
             component={FormField}
           />
           <br />
           <Field
+            id="signup-email"
             name="email"
             type="email"
             hintText="Email"
@@ -51,6 +53,7 @@ export default class Signup extends Component {
           />
           <br />
           <Field
+            id="signup-password"
             name="password"
             type="password"
             hintText="Password"
@@ -58,6 +61,7 @@ export default class Signup extends Component {
           />
           <br />
           <Field
+            id="signup-feedback"
             name="feedback"
             hintText="Feedback"
             component={FormField}

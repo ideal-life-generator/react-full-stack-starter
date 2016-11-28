@@ -14,7 +14,7 @@
       "command": "webpack-dev-server --config webpack-client.js",
       "env": {
         "NODE_ENV": "development",
-        "RENDERING_ON": "browser"
+        "RENDERING_ON": "client"
       }
     },
     "dev:server": {

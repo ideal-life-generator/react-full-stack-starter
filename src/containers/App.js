@@ -10,7 +10,7 @@ const { env: { NODE_ENV, RENDERING_ON } } = process;
 const { object, element } = PropTypes;
 
 export default function App({ theme, store, routes }) {
-  if (NODE_ENV === 'development' && RENDERING_ON === 'browser') {
+  if (NODE_ENV === 'development' && RENDERING_ON === 'client') {
     const { AppContainer } = require('react-hot-loader');
 
     return (
