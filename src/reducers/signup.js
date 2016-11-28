@@ -1,6 +1,10 @@
 import axios from './utils/axios';
 import createReducer from './utils/createReducer';
 
+const REQUEST_USERS = 'REQUEST_USERS';
+const USERS_SUCCESS_RESPONSE = 'USERS_SUCCESS_RESPONSE';
+const USERS_RESPONSE_FAILURE = 'USERS_RESPONSE_FAILURE';
+
 export function submit() {
   return {
     types: [REQUEST_USERS, USERS_SUCCESS_RESPONSE, USERS_RESPONSE_FAILURE],
@@ -10,9 +14,9 @@ export function submit() {
 
         return data;
       } catch (error) {
-        throw {
+        throw new Error({
           message: 'Error receiving users.',
-        };
+        });
       }
     },
   };

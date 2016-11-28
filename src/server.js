@@ -1,5 +1,4 @@
 import { resolve } from 'path';
-import httpProxy from 'http-proxy';
 import express from 'express';
 import compression from 'compression';
 import cors from 'cors';
@@ -9,9 +8,10 @@ import { match, RouterContext } from 'react-router';
 import { Provider } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import routes from '../src/routes';
-import initStore from '../src/store';
-import initTheme from '../src/theme';
+import routes from './routes';
+import initStore from './store';
+import initTheme from './theme';
+import styles from './styles/common.scss';
 
 const { env: { NODE_ENV } } = process;
 
@@ -58,9 +58,11 @@ app.get('*', (req, res, next) => {
       const appHtml = renderToString(
         <MuiThemeProvider muiTheme={theme}>
           <Provider store={store}>
-            <RouterContext {...props} />
+            <div className={styles.mainWrap}>
+              <RouterContext {...props} />
+            </div>
           </Provider>
-        </MuiThemeProvider>
+        </MuiThemeProvider>,
       );
 
       res.send(renderPage(appHtml, initialState));

@@ -1,1 +1,1 @@
-# React Starter Kit
+# React Full Stack Starter

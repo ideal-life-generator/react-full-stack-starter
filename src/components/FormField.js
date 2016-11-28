@@ -1,7 +1,9 @@
-import React, { Component } from 'react' ;
+import React, { PropTypes } from 'react' ;
 import TextField from 'material-ui/TextField';
 
-export default function FormField({ input, meta: { touched, error, warning }, ...props }) {
+const { bool, string, shape } = PropTypes;
+
+export default function FormField({ input, meta: { touched, error }, ...props }) {
   return (
     <TextField
       {...input}
@@ -10,3 +12,14 @@ export default function FormField({ input, meta: { touched, error, warning }, ..
     />
   );
 }
+
+FormField.propTypes = {
+  input: shape({
+    name: string.isRequired,
+    value: string,
+  }).isRequired,
+  meta: shape({
+    touched: bool.isRequired,
+    error: string,
+  }).isRequired,
+};

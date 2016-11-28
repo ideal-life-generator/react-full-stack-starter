@@ -1,10 +1,11 @@
-import React, { Component } from 'react' ;
+import React, { Component, PropTypes } from 'react' ;
 import { Field, reduxForm } from 'redux-form';
-import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import * as validations from '../utils/validations';
 import FormField from '../components/FormField';
-import classes from '../styles/signup.scss';
+import styles from '../styles/signup.scss';
+
+const { bool, func } = PropTypes;
 
 function validate({ name, email, password }) {
   return {
@@ -12,7 +13,7 @@ function validate({ name, email, password }) {
     email: validations.email(email),
     password: validations.password(password),
   };
-};
+}
 
 @reduxForm({
   form: 'signup',
@@ -25,12 +26,17 @@ function validate({ name, email, password }) {
 export default class Signup extends Component {
   static title = 'Signup';
 
+  static propTypes = {
+    handleSubmit: func.isRequired,
+    submitting: bool.isRequired,
+  };
+
   render() {
-    const { props: { handleSubmit, pristine, reset, submitting } } = this;
+    const { props: { handleSubmit, submitting } } = this;
 
     return (
-      <section className={classes.signup}>
-        <form className={classes.form}>
+      <section className={styles.signup}>
+        <form className={styles.form}>
           <Field
             name="name"
             hintText="Name"

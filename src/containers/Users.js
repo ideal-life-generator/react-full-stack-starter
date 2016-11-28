@@ -1,26 +1,40 @@
-import React, { Component } from 'react' ;
+import React, { Component, PropTypes } from 'react' ;
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux' ;
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
-import { pink500, black500, red500 } from 'material-ui/styles/colors';
-import { load } from '../reducers/users';
+import * as usersActions from '../reducers/users';
 import styles from '../styles/users.scss';
 
-@connect(({ users }) => users, (dispatch) => bindActionCreators({ load }, dispatch))
+const { bool, number, string, func, arrayOf, shape } = PropTypes;
+
+@connect(({ users }) => users, dispatch => bindActionCreators(usersActions, dispatch))
 
 export default class Users extends Component {
   static title = 'Users';
 
+  static propTypes = {
+    collection: arrayOf(shape({
+      id: number.isRequired,
+      name: string.isRequired,
+      feedback: string,
+    }).isRequired).isRequired,
+    load: func.isRequired,
+    isFailure: bool.isRequired,
+    error: shape({
+      message: string,
+    }).isRequired,
+  };
+
   componentDidMount() {
-    const { props: { collection, load } } = this;
+    const { props: { load } } = this;
 
     load();
   }
 
   render() {
-    const { props: { load, collection, isFetched, isFailure, error: { message } } } = this;
+    const { props: { load, collection, isFailure, error: { message } } } = this;
 
     return (
       <div>
@@ -36,7 +50,7 @@ export default class Users extends Component {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {collection.map(({ id, name, feedback, verified }) => (
+            {collection.map(({ id, name, feedback }) => (
               <TableRow key={id}>
                 <TableRowColumn className={styles.id}>{id}</TableRowColumn>
                 <TableRowColumn className={styles.name}>{name}</TableRowColumn>

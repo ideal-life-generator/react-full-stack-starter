@@ -1,24 +1,23 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import fetchMiddleware from './reducers/utils/fetchMiddleware';
-import DevTools from './containers/DevTools';
 import reducers from './reducers';
 
 const { env: { NODE_ENV, RENDERING_ON } } = process;
 
 function generateCompose(middlewares) {
   if (NODE_ENV === 'development' && RENDERING_ON === 'browser') {
+    const DevTools = require('./containers/DevTools').default;
+
     return compose(
       middlewares,
       DevTools.instrument(),
     );
   }
 
-  if ((NODE_ENV === 'development' && RENDERING_ON === 'server') || NODE_ENV === 'production') {
-    return compose(
-      middlewares,
-    );
-  }
+  return compose(
+    middlewares,
+  );
 }
 
 export default (initialState = {}) => {

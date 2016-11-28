@@ -1,40 +1,28 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
-import { Provider } from 'react-redux';
-import { Router, browserHistory, match } from 'react-router';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import initTheme from '../src/theme';
+import initTheme from './theme';
 import initStore from './store';
 import routes from './routes';
+import App from './containers/App';
+
+const theme = initTheme(navigator.userAgent);
+const store = initStore(window.INITIAL_STATE);
 
 const { env: { NODE_ENV, RENDERING_ON } } = process;
 
 injectTapEventPlugin();
 
-const theme = initTheme(navigator.userAgent);
-const store = initStore(window.INITIAL_STATE);
-
 function renderApp() {
   render(
-    <AppContainer>
-      <MuiThemeProvider muiTheme={theme}>
-        <Provider store={store}>
-          <Router
-            history={browserHistory}
-            routes={routes}
-          />
-        </Provider>
-      </MuiThemeProvider>
-    </AppContainer>,
+    <App
+      theme={theme}
+      store={store}
+      routes={routes}
+    />,
     document.getElementById('app'),
   );
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  renderApp();
-});
 
 if (NODE_ENV === 'development' && RENDERING_ON === 'browser') {
   if (module.hot) {
@@ -45,3 +33,7 @@ if (NODE_ENV === 'development' && RENDERING_ON === 'browser') {
     });
   }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderApp();
+});

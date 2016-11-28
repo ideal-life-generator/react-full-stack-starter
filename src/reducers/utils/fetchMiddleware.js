@@ -1,13 +1,13 @@
-export default ({ dispatch }) => next => async action => {
+export default ({ dispatch }) => next => async (action) => {
   const { types, fetch } = action;
 
   if (fetch) {
     if (!Array.isArray(types) || types.length !== 3 || !types.every(type => typeof type === 'string')) {
-      throw new Error('Expected an array of three string types.')
+      throw new Error('Expected an array of three string types.');
     }
 
     if (typeof fetch !== 'function') {
-      throw new Error('Expected fetch to be a function.')
+      throw new Error('Expected fetch to be a function.');
     }
 
     const [REQUEST_TYPE, SUCCESS_TYPE, FAILURE_TYPE] = types;

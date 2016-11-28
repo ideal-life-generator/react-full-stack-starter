@@ -10,6 +10,6 @@ export const close = createAction(MAIN_MENU_CLOSE);
 const initialState = false;
 
 export default createReducer(initialState, {
-  [MAIN_MENU_OPEN](state) { return true; },
-  [MAIN_MENU_CLOSE](state) { return false; },
+  [MAIN_MENU_OPEN]() { return true; },
+  [MAIN_MENU_CLOSE]() { return false; },
 });

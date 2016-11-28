@@ -16,19 +16,14 @@ const base = {
     filename: '[name].js',
     sourceMapFilename: '[name].js.map',
   },
-    // eslint: {
-    //     configFile: '.eslintrc',
-    //     failOnWarning: false,
-    //     failOnError: false
-    // },
   module: {
-    // preLoaders: [
-    //         {
-    //             test: /\.js$/,
-    //             exclude: /node_modules/,
-    //             loader: 'eslint'
-    //         }
-    //     ],
+    preLoaders: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+      },
+    ],
     loaders: [
       {
         test: /\.js$/,
@@ -36,6 +31,12 @@ const base = {
         exclude: /node_modules/,
       },
     ],
+  },
+  eslint: {
+    configFile: '.eslintrc',
+    failOnWarning: false,
+    failOnError: false,
+    quiet: true,
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),

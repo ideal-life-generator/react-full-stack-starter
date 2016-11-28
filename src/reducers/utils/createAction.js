@@ -1,5 +1,5 @@
 export default (type, ...argNames) => (...args) => {
-  let action = { type };
+  const action = { type };
 
   argNames.forEach((arg, index) => {
     console.log(argNames[index], args[index]);

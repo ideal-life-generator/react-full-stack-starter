@@ -11,7 +11,7 @@ const app = express();
 app.use(compression());
 app.use(cors());
 
-app.use(async ({ url, method }, res, next) => {
+app.use(async ({ url, method }, res) => {
   const handler = findHandler(queries, url, method);
 
   if (handler) {
@@ -22,9 +22,9 @@ app.use(async ({ url, method }, res, next) => {
     } catch (error) {
       res.status(400).send(error.message);
     }
-  } else {
-    res.status(404).end('Not found.');
   }
+
+  res.status(404).end('Not found.');
 });
 
 app.listen(5001, () => {

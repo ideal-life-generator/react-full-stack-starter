@@ -1,18 +1,28 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
-import DevTools from '../containers/DevTools';
 import MainMenuItem from '../components/MainMenuItem';
-import { open, close } from '../reducers/main-menu';
+import * as mainMenuActions from '../reducers/main-menu';
 import styles from '../styles/common.scss';
 
-const { env: { NODE_ENV, RENDERING_ON } } = process;
+const { bool, string, func, shape, arrayOf, element } = PropTypes;
 
-@connect(({ mainMenu }) => ({ mainMenu }), (dispatch) => bindActionCreators({ open, close }, dispatch))
+@connect(({ mainMenu: isOpened }) => ({ isOpened }), dispatch => bindActionCreators(mainMenuActions, dispatch))
 
-export default class Root extends Component {
+export default class Main extends Component {
+  static propTypes = {
+    children: element.isRequired,
+    open: func.isRequired,
+    close: func.isRequired,
+    isOpened: bool.isRequired,
+    linksSettings: arrayOf(shape({
+      to: string.isRequired,
+      description: string.isRequired,
+    }).isRequired).isRequired,
+  };
+
   static defaultProps = {
     linksSettings: [
       { to: '/', description: 'Home' },
@@ -28,27 +38,26 @@ export default class Root extends Component {
         children,
         open,
         close,
-        mainMenu,
+        isOpened,
         linksSettings,
         children: { props: { route: { component: { title } } } },
       },
     } = this;
 
     return (
-      <div className={styles.root}>
+      <div className={styles.main}>
         <AppBar
           title={title}
           onLeftIconButtonTouchTap={open}
         />
         <Drawer
-          open={mainMenu}
+          open={isOpened}
           onRequestChange={close}
           docked={false}
         >
           {linksSettings.map((linkSettings, index) => (<MainMenuItem key={index} {...linkSettings} onTouchTap={close} />))}
         </Drawer>
         {children}
-        {NODE_ENV === 'development' && RENDERING_ON === 'browser' && <DevTools />}
       </div>
     );
   }

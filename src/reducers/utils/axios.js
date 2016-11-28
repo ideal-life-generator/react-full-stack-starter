@@ -12,5 +12,7 @@ export default axios.create({
 
       return formData;
     }
+
+    return data;
   }],
 });

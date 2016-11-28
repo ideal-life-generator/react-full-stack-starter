@@ -11,6 +11,7 @@ if (NODE_ENV === 'development') {
     entry: {
       packages: [
         'react-hot-loader/patch',
+        'react-hot-loader',
         'redux-devtools',
         'redux-devtools-dock-monitor',
         'redux-devtools-log-monitor',
