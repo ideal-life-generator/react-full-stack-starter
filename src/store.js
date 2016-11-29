@@ -26,8 +26,8 @@ export default (initialState = {}) => {
     initialState,
     generateCompose(
       applyMiddleware(
-        thunk,
         fetchMiddleware,
+        thunk,
       ),
     ),
   );

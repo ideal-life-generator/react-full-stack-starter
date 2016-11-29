@@ -33,7 +33,6 @@ const base = {
   eslint: {
     quiet: true,
   },
-  devtool: '#source-map',
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new DefinePlugin({

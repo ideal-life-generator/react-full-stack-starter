@@ -1,6 +1,7 @@
 const { resolve } = require('path');
 const { BannerPlugin } = require('webpack');
 const { smart } = require('webpack-merge');
+const combineLoaders = require('webpack-combine-loaders');
 const nodeExternals = require('webpack-node-externals');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 const base = require('./webpack-base');
@@ -19,11 +20,25 @@ const server = smart(base, {
       {
         test: /\.scss$/,
         exclude: /node_modules/,
-        loaders: [
-          'fake-style-loader',
-          'css-loader?modules&localIdentName=[name]_[local]',
-          'sass-loader',
-        ],
+        loader: combineLoaders([
+          {
+            loader: 'fake-style-loader',
+          },
+          {
+            loader: 'css-loader',
+            query: {
+              modules: true,
+              sourceMap: false,
+              localIdentName: '[name]_[local]',
+            }
+          },
+          {
+            loader: 'sass-loader',
+            query: {
+              sourceMap: false,
+            }
+          },
+        ]),
       },
       {
         test: /\.(png|svg)$/,
@@ -33,6 +48,7 @@ const server = smart(base, {
     ],
   },
   externals: [nodeExternals()],
+  devtool: '#source-map',
   plugins: [
     new BannerPlugin('require("source-map-support").install();', { raw: true, entryOnly: false }),
   ],

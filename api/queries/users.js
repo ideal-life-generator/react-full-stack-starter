@@ -1,17 +1,15 @@
 import users from '../database/users';
 
-export function GET() {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const collection = await users.find();
+export default async () => {
+  try {
+    const collection = await users.find();
 
-      const result = {
-        collection,
-      };
+    const result = {
+      collection,
+    };
 
-      resolve(result);
-    } catch (error) {
-      reject(error);
-    }
-  });
-}
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};

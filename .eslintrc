@@ -11,6 +11,8 @@
     "import/no-extraneous-dependencies": [1],
     "import/prefer-default-export": [1],
     "consistent-return": [1],
+    "no-throw-literal": [1],
+    "no-useless-computed-key": [1],
     "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
     "react/forbid-prop-types": [1],
     "jsx-a11y/anchor-has-content": [1]

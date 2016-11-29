@@ -5,6 +5,7 @@ import initTheme from './theme';
 import initStore from './store';
 import routes from './routes';
 import App from './containers/App';
+import './styles/common.scss';
 
 const theme = initTheme(navigator.userAgent);
 const store = initStore(window.INITIAL_STATE);

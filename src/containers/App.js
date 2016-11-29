@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react' ;
 import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router';
+import { ReduxAsyncConnect } from 'redux-connect';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import DevTools from './DevTools';
-import styles from '../styles/common.scss';
+import styles from '../styles/root.scss';
 
 const { env: { NODE_ENV, RENDERING_ON } } = process;
 
@@ -17,10 +18,13 @@ export default function App({ theme, store, routes }) {
       <AppContainer>
         <MuiThemeProvider muiTheme={theme}>
           <Provider store={store}>
-            <div className={styles.mainWrap}>
+            <div className={styles.rootWrap}>
               <Router
                 history={browserHistory}
                 routes={routes}
+                render={props => (
+                  <ReduxAsyncConnect {...props} filter={item => !item.deferred} />
+                )}
               />
               <DevTools />
             </div>
@@ -33,10 +37,13 @@ export default function App({ theme, store, routes }) {
   return (
     <MuiThemeProvider muiTheme={theme}>
       <Provider store={store}>
-        <div className={styles.mainWrap}>
+        <div className={styles.rootWrap}>
           <Router
             history={browserHistory}
             routes={routes}
+            render={props => (
+              <ReduxAsyncConnect {...props} filter={item => !item.deferred} />
+            )}
           />
         </div>
       </Provider>

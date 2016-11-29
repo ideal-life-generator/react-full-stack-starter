@@ -14,9 +14,9 @@ export function load() {
 
         return data;
       } catch (error) {
-        throw new Error({
+        throw {
           message: 'Error receiving users.',
-        });
+        };
       }
     },
   };

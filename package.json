@@ -1,5 +1,5 @@
 {
-  "name": "modern-react-starter-kit",
+  "name": "react-full-stack-starter",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -7,7 +7,7 @@
     "dev:client": "better-npm-run dev:client",
     "dev:server": "better-npm-run dev:server",
     "dev:api": "better-npm-run dev:api",
-    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\" \"npm run dev:api\""
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\" \"npm run dev:api\" --kill-others"
   },
   "betterScripts": {
     "dev:client": {
@@ -33,14 +33,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ideal-life/modern-react-starter-kit.git"
+    "url": "git+https://github.com/ideal-life-generator/react-full-stack-starter.git"
   },
-  "author": "ideal.life",
-  "license": "MIT",
+  "author": "ideal.life.generator",
   "bugs": {
-    "url": "https://github.com/ideal-life/modern-react-starter-kit/issues"
+    "url": "https://github.com/ideal-life-generator/react-full-stack-starter/issues"
   },
-  "homepage": "https://github.com/ideal-life/modern-react-starter-kit#readme",
+  "homepage": "https://github.com/ideal-life-generator/react-full-stack-starter#readme",
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-core": "^6.18.2",
@@ -78,6 +77,7 @@
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.3",
+    "webpack-combine-loaders": "^2.0.3",
     "webpack-dev-server": "^1.16.2",
     "webpack-merge": "^0.20.0",
     "webpack-node-externals": "^1.5.4",
@@ -96,6 +96,7 @@
     "react-router": "^3.0.0",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
+    "redux-connect": "^4.0.2",
     "redux-form": "^6.2.0",
     "redux-thunk": "^2.1.0"
   }

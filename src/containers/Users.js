@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react' ;
 import { bindActionCreators } from 'redux';
+import { asyncConnect } from 'redux-connect';
 import { connect } from 'react-redux' ;
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -8,6 +9,12 @@ import * as usersActions from '../reducers/users';
 import styles from '../styles/users.scss';
 
 const { bool, number, string, func, arrayOf, shape } = PropTypes;
+
+@asyncConnect([{
+  promise({ store: { dispatch } }) {
+    return dispatch(usersActions.load());
+  },
+}])
 
 @connect(({ users }) => users, dispatch => bindActionCreators(usersActions, dispatch))
 
@@ -26,12 +33,6 @@ export default class Users extends Component {
       message: string,
     }).isRequired,
   };
-
-  componentDidMount() {
-    const { props: { load } } = this;
-
-    load();
-  }
 
   render() {
     const { props: { load, collection, isFailure, error: { message } } } = this;

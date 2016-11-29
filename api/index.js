@@ -24,7 +24,7 @@ app.use(async ({ url, method }, res) => {
     }
   }
 
-  res.status(404).end('Not found.');
+  res.status(404).end('Not found');
 });
 
 app.listen(5001, () => {
