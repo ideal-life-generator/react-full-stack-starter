@@ -18,6 +18,11 @@ const server = smart(base, {
   module: {
     loaders: [
       {
+        test: /\.html$/,
+        exclude: /node_modules/,
+        loader: 'html-loader',
+      },
+      {
         test: /\.scss$/,
         exclude: /node_modules/,
         loader: combineLoaders([

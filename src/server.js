@@ -13,6 +13,7 @@ import routes from './routes';
 import initStore from './store';
 import initTheme from './theme';
 import styles from './styles/root.scss';
+import indexHtml from './index.html';
 import './styles/common.scss';
 
 const { env: { NODE_ENV } } = process;
@@ -26,23 +27,15 @@ app.use(express.static(resolve('dist')));
 injectTapEventPlugin();
 
 function renderPage(appHtml, initialState) {
-  return `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="utf-8" />
-        <title>React Full Stack Starter</title>
+  return (
+    indexHtml
+      .replace('<!-- APP_HTML -->', appHtml)
+      .replace('<!-- INITIAL_STATE -->', `
         <script>
           window.INITIAL_STATE = ${JSON.stringify(initialState)};
         </script>
-        <script src="/commons.js"></script>
-        <script src="/client.js"></script>
-      </head>
-      <body>
-        <div id="app">${appHtml}</div>
-      </body>
-    </html>
-  `;
+      `)
+  );
 }
 
 app.get('*', (req, res, next) => {
