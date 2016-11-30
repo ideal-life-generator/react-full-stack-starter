@@ -3,7 +3,7 @@ const { BannerPlugin } = require('webpack');
 const { smart } = require('webpack-merge');
 const combineLoaders = require('webpack-combine-loaders');
 const nodeExternals = require('webpack-node-externals');
-const WebpackShellPlugin = require('webpack-shell-plugin');
+const ReloadServerPlugin = require('reload-server-webpack-plugin');
 const base = require('./webpack-base');
 const client = require('./webpack-client');
 
@@ -11,7 +11,7 @@ const { env: { NODE_ENV } } = process;
 
 const server = smart(base, {
   target: 'node',
-  context: resolve('./src'),
+  context: resolve('./app'),
   entry: {
     server: './server',
   },
@@ -55,7 +55,7 @@ const server = smart(base, {
   externals: [nodeExternals()],
   devtool: '#source-map',
   plugins: [
-    new BannerPlugin('require("source-map-support").install();', { raw: true, entryOnly: false }),
+    new BannerPlugin(`require('source-map-support').install();`, { raw: true, entryOnly: false }),
   ],
 });
 
@@ -64,8 +64,8 @@ const serverRendering = smart(client, {});
 if (NODE_ENV === 'development') {
   const serverDevelopment = smart(server, {
     plugins: [
-      new WebpackShellPlugin({
-        onBuildEnd: ['nodemon dist/server.js --watch dist/server.js'],
+      new ReloadServerPlugin({
+        script: 'build/server.js',
       }),
     ],
   });

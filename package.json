@@ -7,7 +7,7 @@
     "dev:client": "better-npm-run dev:client",
     "dev:server": "better-npm-run dev:server",
     "dev:api": "better-npm-run dev:api",
-    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\" \"npm run dev:api\" --kill-others"
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\" \"npm run dev:api\""
   },
   "betterScripts": {
     "dev:client": {
@@ -18,14 +18,14 @@
       }
     },
     "dev:server": {
-      "command": "webpack --watch --config webpack-server.js --display-modules --display-chunks",
+      "command": "webpack --config webpack-server.js --watch --display-chunks --display-modules",
       "env": {
         "NODE_ENV": "development",
         "RENDERING_ON": "server"
       }
     },
     "dev:api": {
-      "command": "webpack --watch --config webpack-api.js --display-modules --display-chunks",
+      "command": "webpack --config webpack-api.js --watch --display-chunks --display-modules",
       "env": {
         "NODE_ENV": "development"
       }
@@ -36,6 +36,7 @@
     "url": "git+https://github.com/ideal-life-generator/react-full-stack-starter.git"
   },
   "author": "ideal.life.generator",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ideal-life-generator/react-full-stack-starter/issues"
   },
@@ -52,13 +53,12 @@
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
-    "babel-runtime": "^6.18.0",
     "better-npm-run": "^0.0.13",
     "clean-webpack-plugin": "^0.1.14",
     "concurrently": "^3.1.0",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.26.0",
-    "eslint": "^3.11.0",
+    "eslint": "^3.11.1",
     "eslint-config-airbnb": "^13.0.0",
     "eslint-loader": "^1.6.1",
     "eslint-plugin-import": "^2.2.0",
@@ -69,20 +69,19 @@
     "file-loader": "^0.9.0",
     "html-loader": "^0.4.4",
     "node-sass": "^3.13.0",
-    "nodemon": "^1.11.0",
     "postcss-loader": "^1.1.1",
     "react-hot-loader": "^3.0.0-beta.6",
     "redux-devtools": "^3.3.1",
     "redux-devtools-dock-monitor": "^1.1.1",
     "redux-devtools-log-monitor": "^1.1.1",
+    "reload-server-webpack-plugin": "^1.0.1",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.3",
     "webpack-combine-loaders": "^2.0.3",
     "webpack-dev-server": "^1.16.2",
-    "webpack-merge": "^0.20.0",
-    "webpack-node-externals": "^1.5.4",
-    "webpack-shell-plugin": "^0.4.3"
+    "webpack-merge": "^1.0.2",
+    "webpack-node-externals": "^1.5.4"
   },
   "dependencies": {
     "axios": "^0.15.3",
@@ -98,7 +97,7 @@
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
     "redux-connect": "^4.0.2",
-    "redux-form": "^6.2.0",
+    "redux-form": "^6.2.1",
     "redux-thunk": "^2.1.0"
   }
 }

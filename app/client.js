@@ -1,24 +1,26 @@
 import React from 'react';
 import { render } from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import initTheme from './theme';
 import initStore from './store';
+import initTheme from './theme';
 import routes from './routes';
 import App from './containers/App';
 import './styles/common.scss';
 
-const theme = initTheme(navigator.userAgent);
-const store = initStore(window.INITIAL_STATE);
-
 const { env: { NODE_ENV, RENDERING_ON } } = process;
+
+const { INITIAL_STATE } = window;
+
+const store = initStore(INITIAL_STATE);
+const theme = initTheme(navigator.userAgent);
 
 injectTapEventPlugin();
 
 function renderApp() {
   render(
     <App
-      theme={theme}
       store={store}
+      theme={theme}
       routes={routes}
     />,
     document.getElementById('app'),

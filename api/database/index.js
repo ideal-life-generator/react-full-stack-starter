@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
+import { mongoDBServer } from '../../config';
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb://public:public@ds155747.mlab.com:55747/react-starter-kit', () => {
-  console.log('MongoBD is connected to database.');
+mongoose.connect(mongoDBServer, () => {
+  console.log(`MongoBD connected to ${mongoDBServer} server.`);
 });
 
 export default mongoose;

@@ -10,7 +10,7 @@ const { env: { NODE_ENV, RENDERING_ON } } = process;
 
 const base = {
   output: {
-    path: resolve('dist'),
+    path: resolve('build'),
     filename: '[name].js',
     sourceMapFilename: '[name].js.map',
   },
@@ -34,7 +34,7 @@ const base = {
     quiet: true,
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(['build']),
     new DefinePlugin({
       process: {
         env: {

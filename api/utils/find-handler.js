@@ -5,10 +5,10 @@ export default (queries, url, method) => {
     const { [queryUrl]: queryMethods } = queries;
 
     if (queryMethods) {
-      const { ['default']: getHandler, [method]: handler } = queryMethods;
+      const { default: defaultHandler, [method]: handler } = queryMethods;
 
-      if (method === 'GET' && queryMethods.default) {
-        return getHandler;
+      if (method === 'GET' && defaultHandler) {
+        return defaultHandler;
       }
 
       return handler;

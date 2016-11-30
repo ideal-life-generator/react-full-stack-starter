@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { apiHost, apiPort } from '../../../config';
 
 export default axios.create({
-  baseURL: 'http://localhost:5001',
+  baseURL: `${apiHost}:${apiPort}`,
   transformRequest: [(data) => {
     if (data) {
       const formData = new FormData();

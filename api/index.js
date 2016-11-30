@@ -3,6 +3,7 @@ import compression from 'compression';
 import cors from 'cors';
 import findHandler from './utils/find-handler';
 import * as queries from './queries';
+import { apiPort } from '../config';
 
 const { env: { NODE_ENV } } = process;
 
@@ -27,6 +28,6 @@ app.use(async ({ url, method }, res) => {
   res.status(404).end('Not found');
 });
 
-app.listen(5001, () => {
-  console.log(`API server is listen on ${5001} port in ${NODE_ENV} mode.`);
+app.listen(apiPort, () => {
+  console.log(`API server is listen on ${apiPort} port in ${NODE_ENV} mode.`);
 });
