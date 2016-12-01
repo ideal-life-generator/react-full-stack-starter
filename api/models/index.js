@@ -3,9 +3,8 @@ import { mongoDBServer } from '../../config';
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect(mongoDBServer, () => {
+export default mongoose.connect(mongoDBServer, () => {
   console.log(`MongoBD connected to ${mongoDBServer} server.`);
 });
 
-export default mongoose;
-export users from './users';
+export User from './User';

@@ -1,26 +1,26 @@
 import React, { Component, PropTypes } from 'react' ;
+import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
-import * as validations from '../utils/validations';
+import Snackbar from 'material-ui/Snackbar';
 import FormField from '../components/FormField';
+import { signupValidation, signup } from '../controllers/user';
 import styles from '../styles/signup.scss';
 
-const { bool, func } = PropTypes;
+const { bool, string, func } = PropTypes;
 
-function validate({ name, email, password }) {
-  return {
-    name: validations.name(name),
-    email: validations.email(email),
-    password: validations.password(password),
-  };
-}
+@connect(() => ({
+  initialValues: {
+    name: 'Tkachenko Vladislav',
+    email: 'ideal.life.generator@gmail.com',
+    password: 'test password',
+    feedback: 'It\'s fine!',
+  },
+}))
 
 @reduxForm({
   form: 'signup',
-  validate,
-  onSubmit(values) {
-    console.log(values);
-  },
+  validate: signupValidation,
 })
 
 export default class Signup extends Component {
@@ -29,10 +29,12 @@ export default class Signup extends Component {
   static propTypes = {
     handleSubmit: func.isRequired,
     submitting: bool.isRequired,
+    submitFailed: bool.isRequired,
+    error: string,
   };
 
   render() {
-    const { props: { handleSubmit, submitting } } = this;
+    const { props: { handleSubmit, submitting, submitFailed, error } } = this;
 
     return (
       <section className={styles.signup}>
@@ -71,12 +73,18 @@ export default class Signup extends Component {
           <br />
           <RaisedButton
             label="Submit"
-            onTouchTap={handleSubmit}
+            onTouchTap={handleSubmit(signup)}
             disabled={submitting}
             style={{ color: 'black' }}
             primary
           />
         </form>
+        <Snackbar
+          className={styles.errorBox}
+          open={submitFailed && !!error}
+          message={error || ''}
+          autoHideDuration={5000}
+        />
       </section>
     );
   }

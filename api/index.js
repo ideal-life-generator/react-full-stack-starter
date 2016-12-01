@@ -1,6 +1,7 @@
 import express from 'express';
 import compression from 'compression';
 import cors from 'cors';
+import multipart from 'connect-multiparty';
 import findHandler from './utils/find-handler';
 import * as queries from './queries';
 import { apiPort } from '../config';
@@ -11,21 +12,23 @@ const app = express();
 
 app.use(compression());
 app.use(cors());
+app.use(multipart());
 
-app.use(async ({ url, method }, res) => {
-  const handler = findHandler(queries, url, method);
+app.use(async (req, res) => {
+  try {
+    const { url, method } = req;
+    const handler = findHandler(queries, url, method);
 
-  if (handler) {
-    try {
-      const result = await handler();
+    const result = await handler(req);
 
-      res.send(result);
-    } catch (error) {
-      res.status(400).send(error.message);
+    res.send(result);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(404).end(error.message);
+    } else {
+      res.status(400).send(error);
     }
   }
-
-  res.status(404).end('Not found');
 });
 
 app.listen(apiPort, () => {

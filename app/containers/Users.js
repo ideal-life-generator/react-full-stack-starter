@@ -5,25 +5,25 @@ import { connect } from 'react-redux' ;
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
-import * as usersActions from '../reducers/users';
+import { load as loadUsers } from '../controllers/users';
 import styles from '../styles/users.scss';
 
-const { bool, number, string, func, arrayOf, shape } = PropTypes;
+const { bool, string, func, arrayOf, shape } = PropTypes;
 
 @asyncConnect([{
   promise({ store: { dispatch } }) {
-    return dispatch(usersActions.load());
+    return dispatch(loadUsers());
   },
 }])
 
-@connect(({ users }) => users, dispatch => bindActionCreators(usersActions, dispatch))
+@connect(({ users }) => users, dispatch => bindActionCreators({ load: loadUsers }, dispatch))
 
 export default class Users extends Component {
   static title = 'Users';
 
   static propTypes = {
     collection: arrayOf(shape({
-      id: number.isRequired,
+      _id: string.isRequired,
       name: string.isRequired,
       feedback: string,
     }).isRequired).isRequired,
@@ -42,7 +42,6 @@ export default class Users extends Component {
         <Table selectable={false}>
           <TableHeader>
             <TableRow>
-              <TableHeaderColumn className={styles.id}>ID</TableHeaderColumn>
               <TableHeaderColumn className={styles.name}>Name</TableHeaderColumn>
               <TableHeaderColumn>Feedback</TableHeaderColumn>
               <TableHeaderColumn className={styles.button}>
@@ -51,9 +50,8 @@ export default class Users extends Component {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {collection.map(({ id, name, feedback }) => (
-              <TableRow key={id}>
-                <TableRowColumn className={styles.id}>{id}</TableRowColumn>
+            {collection.map(({ _id, name, feedback }) => (
+              <TableRow key={_id}>
                 <TableRowColumn className={styles.name}>{name}</TableRowColumn>
                 <TableRowColumn>{feedback}</TableRowColumn>
                 <TableRowColumn className={styles.button}>

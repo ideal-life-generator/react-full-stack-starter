@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import fetchMiddleware from './reducers/utils/fetchMiddleware';
-import reducers from './reducers';
+import fetchMiddleware from './controllers/utils/fetchMiddleware';
+import reducers from './controllers';
 
 const { env: { NODE_ENV, RENDERING_ON } } = process;
 
@@ -34,8 +34,8 @@ export default (initialState = {}) => {
 
   if (NODE_ENV === 'development' && RENDERING_ON === 'client') {
     if (module.hot) {
-      module.hot.accept('./reducers', () => {
-        const nextReducers = require('./reducers').default;
+      module.hot.accept('./controllers', () => {
+        const nextReducers = require('./controllers').default;
 
         store.replaceReducer(nextReducers);
       });

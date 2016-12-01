@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MainMenuItem from '../components/MainMenuItem';
-import * as mainMenuActions from '../reducers/main-menu';
+import * as mainMenuActions from '../controllers/main-menu';
 import styles from '../styles/root.scss';
 
 const { bool, string, func, shape, arrayOf, element } = PropTypes;

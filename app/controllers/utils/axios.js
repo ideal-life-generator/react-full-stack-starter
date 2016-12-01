@@ -8,12 +8,12 @@ export default axios.create({
       const formData = new FormData();
 
       Object.keys(data).forEach((prop) => {
-        formData.append(prop, data[prop]);
+        const { [prop]: value } = data;
+
+        formData.append(prop, value);
       });
 
       return formData;
     }
-
-    return data;
   }],
 });

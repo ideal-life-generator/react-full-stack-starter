@@ -85,11 +85,14 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
+    "body-parser": "^1.15.2",
     "compression": "^1.6.2",
+    "connect-multiparty": "^2.0.0",
     "cors": "^2.8.1",
     "express": "^4.14.0",
     "material-ui": "^0.16.4",
     "mongoose": "^4.7.0",
+    "mongoose-unique-validator": "^1.0.3",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-redux": "^4.4.6",
@@ -98,6 +101,8 @@
     "redux": "^3.6.0",
     "redux-connect": "^4.0.2",
     "redux-form": "^6.2.1",
-    "redux-thunk": "^2.1.0"
+    "redux-thunk": "^2.1.0",
+    "serve-favicon": "^2.3.2",
+    "validator": "^6.2.0"
   }
 }

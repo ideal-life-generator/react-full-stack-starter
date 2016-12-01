@@ -1,8 +1,9 @@
-import users from '../database/users';
+import User from '../models/User';
 
 export default async () => {
   try {
-    const collection = await users.find();
+    const collection = await User
+      .find(null, 'name email feedback');
 
     const result = {
       collection,
