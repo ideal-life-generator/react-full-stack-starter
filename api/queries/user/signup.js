@@ -1,7 +1,6 @@
-import User from '../../models/User';
 import normalizeError from '../../utils/normalize-error';
 
-export async function POST({ body }) {
+export async function POST({ User }, { body }) {
   try {
     const user = new User(body);
 

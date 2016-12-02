@@ -4,19 +4,24 @@ import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MainMenuItem from '../components/MainMenuItem';
-import * as mainMenuActions from '../controllers/main-menu';
+import * as uiActions from '../reducers/ui';
 import styles from '../styles/root.scss';
 
 const { bool, string, func, shape, arrayOf, element } = PropTypes;
 
-@connect(({ mainMenu: isOpened }) => ({ isOpened }), dispatch => bindActionCreators(mainMenuActions, dispatch))
+@connect(({
+  ui: { mainMenuOpened },
+}) => ({ mainMenuOpened }), dispatch => bindActionCreators({
+  openMainMenu: uiActions.openMainMenu,
+  closeMainMenu: uiActions.closeMainMenu,
+}, dispatch))
 
 export default class Root extends Component {
   static propTypes = {
     children: element.isRequired,
-    open: func.isRequired,
-    close: func.isRequired,
-    isOpened: bool.isRequired,
+    openMainMenu: func.isRequired,
+    closeMainMenu: func.isRequired,
+    mainMenuOpened: bool.isRequired,
     linksSettings: arrayOf(shape({
       to: string.isRequired,
       description: string.isRequired,
@@ -36,9 +41,9 @@ export default class Root extends Component {
     const {
       props: {
         children,
-        open,
-        close,
-        isOpened,
+        openMainMenu,
+        closeMainMenu,
+        mainMenuOpened,
         linksSettings,
         children: { props: { route: { component: { title } } } },
       },
@@ -48,14 +53,14 @@ export default class Root extends Component {
       <div className={styles.root}>
         <AppBar
           title={title}
-          onLeftIconButtonTouchTap={open}
+          onLeftIconButtonTouchTap={openMainMenu}
         />
         <Drawer
-          open={isOpened}
-          onRequestChange={close}
+          open={mainMenuOpened}
+          onRequestChange={closeMainMenu}
           docked={false}
         >
-          {linksSettings.map((linkSettings, index) => (<MainMenuItem key={index} {...linkSettings} onTouchTap={close} />))}
+          {linksSettings.map((linkSettings, index) => (<MainMenuItem key={index} {...linkSettings} onTouchTap={closeMainMenu} />))}
         </Drawer>
         {children}
       </div>

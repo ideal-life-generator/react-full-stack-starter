@@ -24,6 +24,7 @@ const client = smart(base, {
       'redux-connect',
       'redux-form',
       'redux-thunk',
+      'validator/lib/isEmail',
     ],
     client: './client',
   },

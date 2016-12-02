@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 import isEmail from 'validator/lib/isEmail';
-import database from './';
+import addModel from './utils/add-model';
 
 const userSchema = Schema({
   name: {
@@ -37,4 +37,4 @@ userSchema.set('returnPublic', {
   },
 });
 
-export default database.model('user', userSchema);
+export default addModel('User', userSchema);

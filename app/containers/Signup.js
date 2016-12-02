@@ -4,7 +4,8 @@ import { Field, reduxForm } from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import FormField from '../components/FormField';
-import { signupValidation, signup } from '../controllers/user';
+import { signup } from '../reducers/user';
+import * as is from '../utils/is';
 import styles from '../styles/signup.scss';
 
 const { bool, string, func } = PropTypes;
@@ -20,7 +21,11 @@ const { bool, string, func } = PropTypes;
 
 @reduxForm({
   form: 'signup',
-  validate: signupValidation,
+  validate: ({ name, email, password }) => ({
+    name: is.name(name),
+    email: is.email(email),
+    password: is.password(password),
+  }),
 })
 
 export default class Signup extends Component {

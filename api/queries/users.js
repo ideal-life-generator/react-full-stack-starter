@@ -1,9 +1,6 @@
-import User from '../models/User';
-
-export default async () => {
+export default async ({ User }) => {
   try {
-    const collection = await User
-      .find(null, 'name email feedback');
+    const collection = await User.find(null, 'name feedback');
 
     const result = {
       collection,

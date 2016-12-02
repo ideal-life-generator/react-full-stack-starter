@@ -1,4 +1,4 @@
-import axios from './utils/axios';
+import axios from '../utils/axios';
 import createReducer from './utils/createReducer';
 
 const REQUEST_USERS = 'REQUEST_USERS';

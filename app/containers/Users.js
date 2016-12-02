@@ -5,7 +5,7 @@ import { connect } from 'react-redux' ;
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
-import { load as loadUsers } from '../controllers/users';
+import { load as loadUsers } from '../reducers/users';
 import styles from '../styles/users.scss';
 
 const { bool, string, func, arrayOf, shape } = PropTypes;

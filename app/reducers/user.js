@@ -1,14 +1,5 @@
 import { SubmissionError } from 'redux-form';
-import axios from './utils/axios';
-import * as is from '../utils/is';
-
-export function signupValidation({ name, email, password }) {
-  return {
-    name: is.name(name),
-    email: is.email(email),
-    password: is.password(password),
-  };
-}
+import axios from '../utils/axios';
 
 export async function signup(values) {
   try {
