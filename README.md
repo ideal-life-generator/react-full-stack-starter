@@ -2,7 +2,7 @@
 
 ## Stage
 
-In development. Not recommended for using.
+In development. Not recommended for use.
 
 ### Roadmap
 
