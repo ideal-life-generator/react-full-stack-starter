@@ -21,20 +21,12 @@ export function required(value) {
   }
 }
 
-export function minLength(length, min) {
-  return length < min;
-}
-
-export function minLength2({ length }) {
-  if (minLength(length, 2)) {
-    return 'Must be 2 characters or more';
-  }
-}
-
-export function minLength6({ length }) {
-  if (minLength(length, 6)) {
-    return 'Must be 2 characters or more';
-  }
+export function minLength(min) {
+  return ({ length }) => {
+    if (length < min) {
+      return 'Must be 2 characters or more';
+    }
+  };
 }
 
 export function validEmail(value) {
@@ -43,6 +35,6 @@ export function validEmail(value) {
   }
 }
 
-export const name = is(required, minLength2);
+export const name = is(required, minLength(2));
 export const email = is(required, validEmail);
-export const password = is(required, minLength6);
+export const password = is(required, minLength(6));

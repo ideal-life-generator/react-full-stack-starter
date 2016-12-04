@@ -1,5 +1,6 @@
 import { Schema } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
+import pick from 'lodash.pick';
 import isEmail from 'validator/lib/isEmail';
 import addModel from './utils/add-model';
 
@@ -14,7 +15,7 @@ const userSchema = Schema({
     required: [true, 'Required'],
     validate: {
       validator: value => isEmail(value),
-      message: 'Email',
+      message: 'Invalid',
     },
     unique: true,
     uniqueCaseInsensitive: true,
@@ -29,12 +30,10 @@ const userSchema = Schema({
 
 userSchema.plugin(uniqueValidator, { message: 'Already in use' });
 
-userSchema.set('returnPublic', {
-  trensform: (doc, ret, options) => {
-    console.log(doc, ret, options);
+userSchema.method('public', function publicMethod() {
+  const publicData = pick(this, '_id', 'name', 'feedback');
 
-    return ret;
-  },
+  return publicData;
 });
 
 export default addModel('User', userSchema);

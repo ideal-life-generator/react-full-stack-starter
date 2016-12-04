@@ -15,6 +15,7 @@
     "no-bitwise": [1],
     "consistent-return": [1],
     "array-callback-return": [1],
+    "no-param-reassign": [1],
     "no-throw-literal": [1],
     "no-underscore-dangle": [1],
     "react/jsx-filename-extension": [1, { "extensions": [".js"] }],

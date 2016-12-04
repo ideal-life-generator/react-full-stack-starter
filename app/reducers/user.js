@@ -9,10 +9,12 @@ export async function signup(values) {
 
     return user;
   } catch (error) {
-    if (error.response.data) {
+    if (error.response && error.response.data) {
       throw new SubmissionError(error.response.data);
-    } else {
+    } else if (typeof error === 'object') {
       throw new SubmissionError({ _error: 'Submit error.' });
     }
+
+    throw error;
   }
 }

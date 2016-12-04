@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 import compression from 'compression';
 import cors from 'cors';
 import multipart from 'connect-multiparty';
-import findHandler from './utils/find-handler';
+import parseQuery from './utils/parse-query';
+import parserError from './utils/parse-error';
 import * as queries from './queries';
 import * as models from './models';
 
@@ -18,54 +19,56 @@ app.use(multipart());
 app.use(async (req, res) => {
   try {
     const { url, method } = req;
-    const handler = findHandler(queries, url, method);
+    const handler = parseQuery(queries, url, method);
 
     const result = await handler(models, req, res);
 
     res.send(result);
   } catch (error) {
-    if (error instanceof Error) {
-      res.status(404).end(error.message);
-    } else {
-      res.status(400).send(error);
-    }
+    const parsedError = parserError(error, 'Not found');
+
+    res.status(400).send(parsedError);
   }
 });
 
 mongoose.Promise = global.Promise;
 
-export const connectDatabase = mongoDBServer => new Promise((resolve, reject) => {
-  try {
-    const database = mongoose.connect(mongoDBServer, (error) => {
-      if (error) {
-        throw error;
-      }
+export function connectDatabase(mongoDBServer) {
+  return new Promise((resolve, reject) => {
+    try {
+      const database = mongoose.connect(mongoDBServer, (error) => {
+        if (error) {
+          throw error;
+        }
 
-      console.log(`MongoDB is connected to ${mongoDBServer} server.`);
+        console.log(`MongoDB is connected to ${mongoDBServer} server.`);
 
-      resolve(() => {
-        database.disconnect();
+        resolve(() => {
+          database.disconnect();
+        });
       });
-    });
-  } catch (error) {
-    reject(error);
-  }
-});
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
 
-export const listenServer = apiPort => new Promise((resolve, reject) => {
-  try {
-    const server = app.listen(apiPort, (error) => {
-      if (error) {
-        throw error;
-      }
+export function listenServer(apiPort) {
+  return new Promise((resolve, reject) => {
+    try {
+      const server = app.listen(apiPort, (error) => {
+        if (error) {
+          throw error;
+        }
 
-      console.log(`API server is listen on ${apiPort} port in ${NODE_ENV} mode.`);
+        console.log(`API server is listen on ${apiPort} port in ${NODE_ENV} mode.`);
 
-      resolve(() => {
-        server.close();
+        resolve(() => {
+          server.close();
+        });
       });
-    });
-  } catch (error) {
-    reject(error);
-  }
-});
+    } catch (error) {
+      reject(error);
+    }
+  });
+}

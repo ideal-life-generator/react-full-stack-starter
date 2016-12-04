@@ -1,17 +1,13 @@
-import normalizeError from '../../utils/normalize-error';
+// import parseError from '../../utils/parse-error';
 
 export async function POST({ User }, { body }) {
   try {
-    const user = new User(body);
+    const user = await User.create(body);
 
-    await user.save();
+    const result = user.public();
 
-    return user;
+    return result;
   } catch (error) {
-    const normalizedError = normalizeError(error, {
-      defaultMessage: 'Signup query handler error',
-    });
-
-    throw normalizedError;
+    throw error;
   }
 }

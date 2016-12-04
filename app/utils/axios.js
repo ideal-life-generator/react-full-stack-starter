@@ -1,29 +1,31 @@
-import axios from 'axios';
-import { apiHost, apiPort, apiTestHost, apiTestPort } from '../../config';
+import { create } from 'axios';
+import { apiHost, apiPort } from '../../config';
 
-const { env: { NODE_ENV } } = process;
-
-function generateBaseUrl() {
-  if (NODE_ENV === 'testing') {
-    return `${apiTestHost}:${apiTestPort}`;
-  }
-
+function generateBaseURL() {
   return `${apiHost}:${apiPort}`;
 }
 
-export default axios.create({
-  baseURL: generateBaseUrl(),
-  transformRequest: [(data) => {
-    if (data) {
-      const formData = new FormData();
+function formDataRequest() {
+  return (data) => {
+    try {
+      if (data) {
+        const formData = Object.keys(data).reduce((formDataContainer, name) => {
+          const { [name]: value } = data;
 
-      Object.keys(data).forEach((prop) => {
-        const { [prop]: value } = data;
+          formDataContainer.append(name, value);
 
-        formData.append(prop, value);
-      });
+          return formDataContainer;
+        }, new FormData());
 
-      return formData;
+        return formData;
+      }
+    } catch (error) {
+      throw error;
     }
-  }],
+  };
+}
+
+export default create({
+  baseURL: generateBaseURL(),
+  transformRequest: [formDataRequest()],
 });
