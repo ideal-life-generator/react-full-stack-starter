@@ -6,7 +6,6 @@ In development. Not recommended for use.
 
 ### Roadmap
 
-- Setup tests fot signup API;
 - Create basic authorization;
 - Create login page;
 - Setup profile;
