@@ -1,17 +1,36 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { asyncConnect } from 'redux-connect';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
+import CircularProgress from 'material-ui/CircularProgress';
+import User from './User';
+import Authorization from './Authorization';
 import MainMenuItem from '../components/MainMenuItem';
 import * as uiActions from '../reducers/ui';
+import { checkUserToken } from '../reducers/user';
 import styles from '../styles/root.scss';
 
 const { bool, string, func, shape, arrayOf, element } = PropTypes;
 
+@asyncConnect([{
+  promise({ store: { getState, dispatch } }) {
+    const { user: { isAuthorized } } = getState();
+
+    if (!isAuthorized) {
+      return dispatch(checkUserToken());
+    }
+  },
+}])
+
 @connect(({
   ui: { mainMenuOpened },
-}) => ({ mainMenuOpened }), dispatch => bindActionCreators({
+  user,
+}) => ({
+  mainMenuOpened,
+  user,
+}), dispatch => bindActionCreators({
   openMainMenu: uiActions.openMainMenu,
   closeMainMenu: uiActions.closeMainMenu,
 }, dispatch))
@@ -19,13 +38,20 @@ const { bool, string, func, shape, arrayOf, element } = PropTypes;
 export default class Root extends Component {
   static propTypes = {
     children: element.isRequired,
-    openMainMenu: func.isRequired,
-    closeMainMenu: func.isRequired,
-    mainMenuOpened: bool.isRequired,
     linksSettings: arrayOf(shape({
       to: string.isRequired,
       description: string.isRequired,
     }).isRequired).isRequired,
+    mainMenuOpened: bool.isRequired,
+    openMainMenu: func.isRequired,
+    closeMainMenu: func.isRequired,
+    user: shape({
+      isStored: bool.isRequired,
+      isAuthorized: bool.isRequired,
+      isFetched: bool.isRequired,
+      _id: string,
+      name: string,
+    }).isRequired,
   };
 
   static defaultProps = {
@@ -37,22 +63,41 @@ export default class Root extends Component {
     ],
   };
 
+  renderIconElement = () => {
+    const { props: { user: { isStored, isAuthorized, isFetched } } } = this;
+
+    if (isStored && isFetched) {
+      return (
+        <CircularProgress
+          style={{ marginTop: 6, marginRight: 15 }}
+          size={35}
+          thickness={5}
+          color="white"
+        />
+      );
+    } else if (isAuthorized) {
+      return <User />;
+    }
+
+    return <Authorization />;
+  }
+
   render() {
     const {
+      renderIconElement,
       props: {
         children,
         openMainMenu,
         closeMainMenu,
         mainMenuOpened,
         linksSettings,
-        children: { props: { route: { component: { title } } } },
       },
     } = this;
 
     return (
       <div className={styles.root}>
         <AppBar
-          title={title}
+          iconElementRight={renderIconElement()}
           onLeftIconButtonTouchTap={openMainMenu}
         />
         <Drawer

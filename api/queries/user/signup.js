@@ -1,13 +1,16 @@
-// import parseError from '../../utils/parse-error';
+import { createRefreshToken, createToken } from '../../authorization';
+import { signupValidation } from '../../../utils/is';
 
-export async function POST({ User }, { body }) {
-  try {
-    const user = await User.create(body);
+export async function POST({ User }, { body: { name, email, password, feedback } }) {
+  const newUser = await User.create({ name, email, password, feedback });
+  const newUserPublic = newUser.public();
+  const { _id } = newUserPublic;
 
-    const result = user.public();
-
-    return result;
-  } catch (error) {
-    throw error;
-  }
+  return {
+    ...newUserPublic,
+    refreshToken: createRefreshToken({ _id }),
+    token: createToken({ _id }),
+  };
 }
+
+POST.validate = signupValidation;

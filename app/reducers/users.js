@@ -1,26 +1,24 @@
-import axios from '../utils/axios';
-import createReducer from './utils/createReducer';
+import axios from './utils/axios';
+import createReducer from './utils/create-reducer';
+import createAsyncAction from './utils/create-async-action';
 
 const REQUEST_USERS = 'REQUEST_USERS';
 const USERS_SUCCESS_RESPONSE = 'USERS_SUCCESS_RESPONSE';
 const USERS_RESPONSE_FAILURE = 'USERS_RESPONSE_FAILURE';
 
-export function load() {
-  return {
-    types: [REQUEST_USERS, USERS_SUCCESS_RESPONSE, USERS_RESPONSE_FAILURE],
-    fetch: async () => {
-      try {
-        const { data } = await axios('users');
-
-        return data;
-      } catch (error) {
-        throw {
-          message: 'Error receiving users.',
-        };
-      }
-    },
-  };
-}
+export const load = createAsyncAction([
+  REQUEST_USERS,
+  USERS_SUCCESS_RESPONSE,
+  USERS_RESPONSE_FAILURE,
+], async () => {
+  try {
+    return await axios('users');
+  } catch (error) {
+    throw {
+      message: 'Error receiving users.',
+    };
+  }
+});
 
 const initialState = {
   isFetched: false,
@@ -32,26 +30,20 @@ const initialState = {
 };
 
 export default createReducer(initialState, {
-  [REQUEST_USERS](state) {
-    return {
-      ...state,
-      isFetched: true,
-      isFailure: false,
-    };
-  },
-  [USERS_SUCCESS_RESPONSE](state, data) {
-    return {
-      ...state,
-      isFetched: false,
-      ...data,
-    };
-  },
-  [USERS_RESPONSE_FAILURE](state, error) {
-    return {
-      ...state,
-      isFetched: false,
-      isFailure: true,
-      error,
-    };
-  },
+  [REQUEST_USERS]: state => ({
+    ...state,
+    isFetched: true,
+    isFailure: false,
+  }),
+  [USERS_SUCCESS_RESPONSE]: (state, { response: { data } }) => ({
+    ...state,
+    isFetched: false,
+    ...data,
+  }),
+  [USERS_RESPONSE_FAILURE]: (state, { error }) => ({
+    ...state,
+    isFetched: false,
+    isFailure: true,
+    error,
+  }),
 });

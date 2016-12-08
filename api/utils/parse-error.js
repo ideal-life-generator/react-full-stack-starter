@@ -1,36 +1,47 @@
 import { Error } from 'mongoose';
-import { StatusCodeError } from 'request-promise/errors';
 import { QueryError } from './parse-query';
+import { IsInvalidError } from '../../utils/is-core';
+import { AuthorizationError } from '../authorization';
 
 const { ValidationError } = Error;
 
 export default (error, defaultMessage) => {
+  const { message } = error;
+
   if (error instanceof ValidationError) {
     const { errors } = error;
 
-    const result = Object.keys(errors).reduce((errorObject, fieldName) => {
-      const { [fieldName]: { message } } = errors;
+    const formErrors = Object.keys(errors).reduce((errorObject, fieldName) => {
+      const { [fieldName]: { filedMessage } } = errors;
 
-      errorObject[fieldName] = message;
-
-      return errorObject;
+      return Object.assign(errorObject, { [fieldName]: filedMessage });
     }, {});
 
-    return result;
-  } else if (error instanceof StatusCodeError) {
-    const { response: result } = error;
-
-    return result;
+    return {
+      status: 400,
+      data: formErrors,
+    };
   } else if (error instanceof QueryError) {
-    const { message } = error;
+    return {
+      status: 400,
+      data: message,
+    };
+  } else if (error instanceof IsInvalidError) {
+    const { errors } = error;
 
-    return message;
-  } else if (error instanceof Error) {
-    const { message } = error;
-    const result = defaultMessage || message;
-
-    return result;
+    return {
+      status: 400,
+      data: errors,
+    };
+  } else if (error instanceof AuthorizationError) {
+    return {
+      status: 401,
+      data: message,
+    };
   }
 
-  return error;
+  return {
+    status: 404,
+    data: message || defaultMessage,
+  };
 };

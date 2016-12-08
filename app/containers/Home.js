@@ -4,8 +4,6 @@ import { primary1Color } from '../theme';
 import styles from '../styles/home.scss';
 
 export default class Home extends Component {
-  static title = 'Home';
-
   render() {
     return (
       <section className={styles.main}>

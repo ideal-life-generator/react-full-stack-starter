@@ -33,7 +33,7 @@
       }
     },
     "test:api": {
-      "command": "mocha --watch api/_test_ --compilers js:babel-register --sort",
+      "command": "mocha api/**/*.test.js --watch --compilers js:babel-register --ui tdd --require should --sort",
       "env": {
         "NODE_ENV": "testing"
       }
@@ -86,7 +86,10 @@
     "redux-devtools-log-monitor": "^1.1.1",
     "reload-server-webpack-plugin": "^1.0.1",
     "sass-loader": "^4.0.2",
+    "should": "^11.1.1",
     "style-loader": "^0.13.1",
+    "supertest": "^2.0.1",
+    "supertest-as-promised": "^4.0.2",
     "webpack": "^1.13.3",
     "webpack-combine-loaders": "^2.0.3",
     "webpack-dev-server": "^1.16.2",
@@ -101,6 +104,7 @@
     "cors": "^2.8.1",
     "es6-error": "^4.0.0",
     "express": "^4.14.0",
+    "jsonwebtoken": "^7.1.9",
     "lodash.pick": "^4.4.0",
     "material-ui": "^0.16.4",
     "mongoose": "^4.7.0",
@@ -114,8 +118,6 @@
     "redux-connect": "^4.0.2",
     "redux-form": "^6.2.1",
     "redux-thunk": "^2.1.0",
-    "request": "^2.79.0",
-    "request-promise": "^4.1.1",
     "serve-favicon": "^2.3.2",
     "validator": "^6.2.0"
   }

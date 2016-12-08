@@ -5,22 +5,19 @@ import { connect } from 'react-redux' ;
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
 import { load as loadUsers } from '../reducers/users';
 import styles from '../styles/users.scss';
 
 const { bool, string, func, arrayOf, shape } = PropTypes;
 
 @asyncConnect([{
-  promise({ store: { dispatch } }) {
-    return dispatch(loadUsers());
-  },
+  promise: ({ store: { dispatch } }) => dispatch(loadUsers()),
 }])
 
 @connect(({ users }) => users, dispatch => bindActionCreators({ load: loadUsers }, dispatch))
 
 export default class Users extends Component {
-  static title = 'Users';
-
   static propTypes = {
     collection: arrayOf(shape({
       _id: string.isRequired,
@@ -28,6 +25,7 @@ export default class Users extends Component {
       feedback: string,
     }).isRequired).isRequired,
     load: func.isRequired,
+    isFetched: bool.isRequired,
     isFailure: bool.isRequired,
     error: shape({
       message: string,
@@ -35,7 +33,7 @@ export default class Users extends Component {
   };
 
   render() {
-    const { props: { load, collection, isFailure, error: { message } } } = this;
+    const { props: { load, collection, isFetched, isFailure, error: { message } } } = this;
 
     return (
       <div>
@@ -43,9 +41,16 @@ export default class Users extends Component {
           <TableHeader>
             <TableRow>
               <TableHeaderColumn className={styles.name}>Name</TableHeaderColumn>
-              <TableHeaderColumn>Feedback</TableHeaderColumn>
+              <TableHeaderColumn>feedback</TableHeaderColumn>
               <TableHeaderColumn className={styles.button}>
-                <RaisedButton label="Refresh" onTouchTap={load} />
+                <RefreshIndicator
+                  percentage={100}
+                  size={35}
+                  left={100}
+                  top={11}
+                  status={isFetched ? 'loading' : 'ready'}
+                  onTouchTap={load}
+                />
               </TableHeaderColumn>
             </TableRow>
           </TableHeader>

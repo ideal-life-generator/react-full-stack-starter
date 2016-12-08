@@ -1,19 +1,5 @@
 import isEmail from 'validator/lib/isEmail';
-
-export default function is(...validations) {
-  return (value) => {
-    const { length } = validations;
-
-    for (let index = 0; index < length; index += 1) {
-      const validation = validations[index];
-      const validatonResult = validation(value);
-
-      if (validatonResult) {
-        return validatonResult;
-      }
-    }
-  };
-}
+import is, { createValidation } from './is-core';
 
 export function required(value) {
   if (!value) {
@@ -24,7 +10,7 @@ export function required(value) {
 export function minLength(min) {
   return ({ length }) => {
     if (length < min) {
-      return 'Must be 2 characters or more';
+      return `Must be ${min} characters or more`;
     }
   };
 }
@@ -38,3 +24,19 @@ export function validEmail(value) {
 export const name = is(required, minLength(2));
 export const email = is(required, validEmail);
 export const password = is(required, minLength(6));
+export const refreshToken = is(required);
+
+export const signupValidation = createValidation({
+  name,
+  email,
+  password,
+});
+
+export const loginValidation = createValidation({
+  email,
+  password,
+});
+
+export const createTokenValidation = createValidation({
+  refreshToken,
+});

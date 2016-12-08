@@ -30,10 +30,8 @@ const userSchema = Schema({
 
 userSchema.plugin(uniqueValidator, { message: 'Already in use' });
 
-userSchema.method('public', function publicMethod() {
-  const publicData = pick(this, '_id', 'name', 'feedback');
-
-  return publicData;
+userSchema.method('public', function PublicMethod() {
+  return pick(this, '_id', 'name', 'feedback');
 });
 
 export default addModel('User', userSchema);

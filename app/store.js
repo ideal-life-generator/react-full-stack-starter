@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import fetchMiddleware from './reducers/utils/fetchMiddleware';
+import fetchMiddleware from './reducers/utils/fetch-middleware';
 import reducers from './reducers';
 
 const { env: { NODE_ENV, RENDERING_ON } } = process;

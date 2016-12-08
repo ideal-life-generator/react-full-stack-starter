@@ -1,5 +1,5 @@
-import createReducer from './utils/createReducer';
-import createAction from './utils/createAction';
+import createReducer from './utils/create-reducer';
+import createAction from './utils/create-action';
 
 const MAIN_MENU_OPEN = 'MAIN_MENU_OPEN';
 const MAIN_MENU_CLOSE = 'MAIN_MENU_CLOSE';
