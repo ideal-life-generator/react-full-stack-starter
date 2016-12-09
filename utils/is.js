@@ -5,6 +5,8 @@ export function required(value) {
   if (!value) {
     return 'Required';
   }
+
+  return undefined;
 }
 
 export function minLength(min) {
@@ -12,6 +14,8 @@ export function minLength(min) {
     if (length < min) {
       return `Must be ${min} characters or more`;
     }
+
+    return undefined;
   };
 }
 
@@ -19,6 +23,8 @@ export function validEmail(value) {
   if (!isEmail(value)) {
     return 'Invalid';
   }
+
+  return undefined;
 }
 
 export const name = is(required, minLength(2));

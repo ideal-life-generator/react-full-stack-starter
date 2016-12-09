@@ -44,7 +44,7 @@ axios.interceptors.response.use(undefined, async (error) => {
       try {
         const refreshToken = localStorage.getItem('refresh-token');
 
-        const { data: { token } } = await axios.post('/user/createToken', { refreshToken });
+        const { data: { token } } = await axios.post('/createToken', { refreshToken });
 
         localStorage.setItem('token', token);
 
@@ -64,3 +64,5 @@ axios.interceptors.response.use(undefined, async (error) => {
 });
 
 export default axios;
+
+// https://www.npmjs.com/package/react-cookie#setrawcookiecookies

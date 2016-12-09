@@ -1,14 +1,14 @@
 import express from 'express';
+import passport from 'passport';
 import compression from 'compression';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import multipart from 'connect-multiparty';
-import { models } from 'mongoose';
-import authorization, { AuthorizationError } from './authorization';
 import parseQuery from './utils/parse-query';
 import parseError from './utils/parse-error';
 import { throwIfInvalid } from '../utils/is-core';
 import * as queries from './queries';
+import { checkJWTToken } from './authorization';
 
 const { env: { NODE_ENV } } = process;
 
@@ -19,23 +19,25 @@ api.use(cors());
 api.use(bodyParser.json());
 api.use(multipart());
 
-api.use(authorization());
+api.use(passport.initialize());
 
-api.use(async (req, res) => {
+api.use(async (req, res, next) => {
   try {
-    const { url, method, body, user, authorizationError } = req;
+    const { url, method, body } = req;
     const handler = parseQuery(queries, url, method);
     const { secured, validate } = handler;
+
+    if (secured) {
+      const user = await checkJWTToken(req, res, next);
+
+      Object.assign(req, { user });
+    }
 
     if (validate) {
       throwIfInvalid(validate(body));
     }
 
-    if (!secured || (secured && user)) {
-      res.send(await handler(models, req, res));
-    } else {
-      throw authorizationError || new AuthorizationError();
-    }
+    res.send(await handler(req, res, next));
   } catch (error) {
     const { status, data } = parseError(error, 'Not found');
 
@@ -60,3 +62,5 @@ export function listen(apiPort) {
 }
 
 export default api;
+
+// https://www.npmjs.com/package/http-errors

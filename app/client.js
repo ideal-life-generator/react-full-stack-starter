@@ -1,6 +1,8 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { browserHistory } from 'react-router';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import { syncHistoryWithStore } from 'react-router-redux';
 import initStore from './store';
 import initTheme from './theme';
 import routes from './routes';
@@ -13,6 +15,7 @@ const { INITIAL_STATE } = window;
 
 const store = initStore(INITIAL_STATE);
 const theme = initTheme(navigator.userAgent);
+const history = syncHistoryWithStore(browserHistory, store);
 
 injectTapEventPlugin();
 
@@ -22,6 +25,7 @@ function renderApp() {
       store={store}
       theme={theme}
       routes={routes}
+      history={history}
     />,
     document.getElementById('app'),
   );

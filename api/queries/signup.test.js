@@ -1,5 +1,5 @@
-import api from '../../index.test';
-import User from '../../database/User';
+import api from '../index.test';
+import User from '../database/User';
 
 const testData = new Map();
 
@@ -16,7 +16,7 @@ testData.set('invalidSignupForm', {
   password: 'inv',
 });
 
-suite('/user/signup', () => {
+suite('/signup', () => {
   suiteSetup(async () => {
     const { email } = testData.get('signupForm');
 
@@ -26,7 +26,7 @@ suite('/user/signup', () => {
   test('Should create new user', async () => {
     const signupForm = testData.get('signupForm');
 
-    const { body: { _id, name, email, password, feedback, refreshToken, token } } = await api.post('/user/signup')
+    const { body: { _id, name, email, password, feedback, refreshToken, token } } = await api.post('/signup')
       .field('name', signupForm.name)
       .field('email', signupForm.email)
       .field('password', signupForm.password)
@@ -43,7 +43,7 @@ suite('/user/signup', () => {
   });
 
   test('Required fields', async () => {
-    await api.post('/user/signup')
+    await api.post('/signup')
       .expect(400, {
         name: 'Required',
         email: 'Required',
@@ -54,7 +54,7 @@ suite('/user/signup', () => {
   test('Min length and email invalid', async () => {
     const { name, email, password } = testData.get('invalidSignupForm');
 
-    await api.post('/user/signup')
+    await api.post('/signup')
       .field('name', name)
       .field('email', email)
       .field('password', password)
@@ -68,7 +68,7 @@ suite('/user/signup', () => {
   test('Email already in use', async () => {
     const { name, email, password } = testData.get('signupForm');
 
-    await api.post('/user/signup')
+    await api.post('/signup')
       .field('name', name)
       .field('email', email)
       .field('password', password)

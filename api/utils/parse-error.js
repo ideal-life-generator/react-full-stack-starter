@@ -11,15 +11,15 @@ export default (error, defaultMessage) => {
   if (error instanceof ValidationError) {
     const { errors } = error;
 
-    const formErrors = Object.keys(errors).reduce((errorObject, fieldName) => {
-      const { [fieldName]: { filedMessage } } = errors;
+    const validationErrors = Object.keys(errors).reduce((errorObject, fieldName) => {
+      const { [fieldName]: { message: filedMessage } } = errors;
 
       return Object.assign(errorObject, { [fieldName]: filedMessage });
     }, {});
 
     return {
       status: 400,
-      data: formErrors,
+      data: validationErrors,
     };
   } else if (error instanceof QueryError) {
     return {

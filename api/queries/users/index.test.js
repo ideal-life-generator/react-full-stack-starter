@@ -1,5 +1,5 @@
-import api from '../index.test';
-import User from '../database/User';
+import api from '../../index.test';
+import User from '../../database/User';
 
 const testData = new Map();
 

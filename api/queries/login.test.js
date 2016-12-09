@@ -1,5 +1,5 @@
-import api from '../../index.test';
-import User from '../../database/User';
+import api from '../index.test';
+import User from '../database/User';
 
 const testData = new Map();
 
@@ -20,7 +20,7 @@ testData.set('failedLoginForm', {
   password: 'failed password',
 });
 
-suite('/user/login', () => {
+suite('/login', () => {
   suiteSetup(async () => {
     const userPayload = testData.get('userPayload');
     const { email } = userPayload;
@@ -39,10 +39,9 @@ suite('/user/login', () => {
   test('Should return user profile', async () => {
     const userPayload = testData.get('userPayload');
 
-    const { body: { _id, name, feedback, refreshToken, token } } = await api.post('/user/login')
+    const { body: { _id, name, feedback, refreshToken, token } } = await api.post('/login')
       .field('email', userPayload.email)
-      .field('password', userPayload.password)
-      .expect(200);
+      .field('password', userPayload.password);
 
     _id.should.be.a.String();
     name.should.be.exactly(userPayload.name);
@@ -52,7 +51,7 @@ suite('/user/login', () => {
   });
 
   test('Required fields', async () => {
-    await api.post('/user/login')
+    await api.post('/login')
       .expect(400, {
         email: 'Required',
         password: 'Required',
@@ -62,7 +61,7 @@ suite('/user/login', () => {
   test('Invalid fields', async () => {
     const { email, password } = testData.get('invalidLoginForm');
 
-    await api.post('/user/login')
+    await api.post('/login')
       .field('email', email)
       .field('password', password)
       .expect(400, {
@@ -74,9 +73,9 @@ suite('/user/login', () => {
   test('Authorization failed', async () => {
     const { email, password } = testData.get('failedLoginForm');
 
-    await api.post('/user/login')
+    await api.post('/login')
       .field('email', email)
       .field('password', password)
-      .expect(403, 'Login failed');
+      .expect(401, 'User not found');
   });
 });

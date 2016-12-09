@@ -1,7 +1,7 @@
-import { checkRefreshToken, createToken, AuthorizationError } from '../../authorization';
-import { createTokenValidation } from '../../../utils/is';
+import { checkRefreshToken, createToken, AuthorizationError } from '../authorization';
+import { createTokenValidation } from '../../utils/is';
 
-export async function POST({ User }, { body: { refreshToken } }) {
+export async function POST({ body: { refreshToken } }) {
   try {
     const payload = checkRefreshToken(refreshToken);
 

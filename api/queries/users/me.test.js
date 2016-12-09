@@ -1,6 +1,9 @@
+import { Types } from 'mongoose';
 import api from '../../index.test';
 import User from '../../database/User';
 import { createToken } from '../../authorization';
+
+const { ObjectId } = Types;
 
 const testData = new Map();
 
@@ -11,7 +14,7 @@ testData.set('userPayload', {
   feedback: 'Test feedback',
 });
 
-suite('/user/me', () => {
+suite('/users/me', () => {
   suiteSetup(async () => {
     const userPayload = testData.get('userPayload');
     const { email } = userPayload;
@@ -21,6 +24,7 @@ suite('/user/me', () => {
 
     testData.set('user', user);
     testData.set('token', createToken({ _id }));
+    testData.set('notFoundToken', createToken({ _id: ObjectId('4edd40c86762e0fb12000003') }));
   });
 
   suiteTeardown(async () => {
@@ -33,7 +37,7 @@ suite('/user/me', () => {
     const userPayload = testData.get('userPayload');
     const token = testData.get('token');
 
-    const { body: { _id, name, feedback } } = await api.get('/user/me')
+    const { body: { _id, name, feedback } } = await api.get('/users/me')
       .set('Authorization', token)
       .expect(200);
 
@@ -42,8 +46,22 @@ suite('/user/me', () => {
     feedback.should.be.exactly(userPayload.feedback);
   });
 
+  test('Invalid token', async () => {
+    await api.get('/users/me')
+      .set('Authorization', 'Invalid token')
+      .expect(401, 'Invalid token');
+  });
+
+  test('User not found', async () => {
+    const token = testData.get('notFoundToken');
+
+    await api.get('/users/me')
+      .set('Authorization', token)
+      .expect(404, 'User not found');
+  });
+
   test('Unauthorized', async () => {
-    await api.get('/user/me')
+    await api.get('/users/me')
       .expect(401, 'Unauthorized');
   });
 });

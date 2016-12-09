@@ -24,16 +24,9 @@ export function storeUser({ _id, name, refreshToken, token }) {
   return dispatch => dispatch(setUser({ _id, name }));
 }
 
-export function logout() {
-  localStorage.removeItem('refresh-token');
-  localStorage.removeItem('token');
-
-  return dispatch => dispatch(reset());
-}
-
-export async function signup(values, dispatch) {
+export async function login(values, dispatch) {
   try {
-    const { data: user } = await axios.post('user/signup', values);
+    const { data: user } = await axios.post('login', values);
 
     dispatch(storeUser(user));
 
@@ -45,6 +38,29 @@ export async function signup(values, dispatch) {
 
     throw new SubmissionError({ _error: 'Submit error.' });
   }
+}
+
+export async function signup(values, dispatch) {
+  try {
+    const { data: user } = await axios.post('signup', values);
+
+    dispatch(storeUser(user));
+
+    return user;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      throw new SubmissionError(error.response.data);
+    }
+
+    throw new SubmissionError({ _error: 'Submit error.' });
+  }
+}
+
+export function logout() {
+  localStorage.removeItem('refresh-token');
+  localStorage.removeItem('token');
+
+  return dispatch => dispatch(reset());
 }
 
 const me = createAsyncAction([
@@ -85,7 +101,7 @@ export function checkUserToken() {
 
 const initialState = {
   isStored: false,
-  isAuthorized: false,
+  isAuthenticated: false,
   isFetched: false,
   _id: null,
   name: null,
@@ -94,9 +110,9 @@ const initialState = {
 export default createReducer(initialState, {
   [STORE_USER]: state => ({ ...state, isStored: true }),
   [REMOVE_USER_FROM_STORE]: state => ({ ...state, isStored: false }),
-  [SET_USER]: (state, { user }) => ({ ...state, isStored: true, isAuthorized: true, ...user }),
+  [SET_USER]: (state, { user }) => ({ ...state, isStored: true, isAuthenticated: true, ...user }),
   [REQUEST_ME]: state => ({ ...state, isFetched: true }),
-  [ME_SUCCESS_RESPONSE]: (state, { response: { data: user } }) => ({ ...state, isAuthorized: true, isFetched: false, ...user }),
-  [ME_RESPONSE_FAILURE]: state => ({ ...state, isAuthorized: false, isFetched: false, _id: null, name: null }),
-  [RESET_USER]: state => ({ ...state, isStored: false, isAuthorized: false, isFetched: false, _id: null, name: null }),
+  [ME_SUCCESS_RESPONSE]: (state, { response: { data: user } }) => ({ ...state, isAuthenticated: true, isFetched: false, ...user }),
+  [ME_RESPONSE_FAILURE]: state => ({ ...state, isAuthenticated: false, isFetched: false, _id: null, name: null }),
+  [RESET_USER]: state => ({ ...state, isStored: false, isAuthenticated: false, isFetched: false, _id: null, name: null }),
 });

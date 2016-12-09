@@ -1,4 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
+import { browserHistory } from 'react-router';
+import { routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
 import fetchMiddleware from './reducers/utils/fetch-middleware';
 import reducers from './reducers';
@@ -28,6 +30,7 @@ export default (initialState = {}) => {
       applyMiddleware(
         fetchMiddleware,
         thunk,
+        routerMiddleware(browserHistory),
       ),
     ),
   );

@@ -4,31 +4,25 @@ import { Field, reduxForm } from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import FormField from '../components/FormField';
-import { signup } from '../reducers/user';
-import * as is from '../utils/is';
-import styles from '../styles/signup.scss';
+import { login } from '../reducers/user';
+import { loginValidation } from '../../utils/is';
+import styles from '../styles/login.scss';
 
 const { bool, string, func } = PropTypes;
 
 @connect(() => ({
   initialValues: {
-    name: 'Tkachenko Vladislav',
     email: 'ideal.life.generator@gmail.com',
     password: 'test password',
-    feedback: 'It\'s fine!',
   },
 }))
 
 @reduxForm({
-  form: 'signup',
-  validate: ({ name, email, password }) => ({
-    name: is.name(name),
-    email: is.email(email),
-    password: is.password(password),
-  }),
+  form: 'login',
+  validate: loginValidation,
 })
 
-export default class Signup extends Component {
+export default class Login extends Component {
   static propTypes = {
     handleSubmit: func.isRequired,
     submitting: bool.isRequired,
@@ -36,21 +30,20 @@ export default class Signup extends Component {
     error: string,
   };
 
+  // componentWillReceiveProps(nextProps) {
+  //   if (this.props.loginPending && !nextProps.loginPending && !nextProps.loginError) {
+  //     // Login success, redirect the page here.
+  //   }
+  // }
+
   render() {
     const { props: { handleSubmit, submitting, submitFailed, error } } = this;
 
     return (
-      <section className={styles.signup}>
+      <section className={styles.login}>
         <form className={styles.form}>
           <Field
-            id="signup-name"
-            name="name"
-            hintText="Name"
-            component={FormField}
-          />
-          <br />
-          <Field
-            id="signup-email"
+            id="login-email"
             name="email"
             type="email"
             hintText="Email"
@@ -58,25 +51,17 @@ export default class Signup extends Component {
           />
           <br />
           <Field
-            id="signup-password"
+            id="login-password"
             name="password"
             type="password"
             hintText="Password"
             component={FormField}
           />
           <br />
-          <Field
-            id="signup-feedback"
-            name="feedback"
-            hintText="feedback"
-            component={FormField}
-            multiLine
-          />
-          <br />
           <br />
           <RaisedButton
             label="Submit"
-            onTouchTap={handleSubmit(signup)}
+            onTouchTap={handleSubmit(login)}
             disabled={submitting}
             style={{ color: 'black' }}
             primary

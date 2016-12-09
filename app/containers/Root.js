@@ -16,9 +16,9 @@ const { bool, string, func, shape, arrayOf, element } = PropTypes;
 
 @asyncConnect([{
   promise({ store: { getState, dispatch } }) {
-    const { user: { isAuthorized } } = getState();
+    const { user: { isAuthenticated } } = getState();
 
-    if (!isAuthorized) {
+    if (!isAuthenticated) {
       return dispatch(checkUserToken());
     }
   },
@@ -47,7 +47,7 @@ export default class Root extends Component {
     closeMainMenu: func.isRequired,
     user: shape({
       isStored: bool.isRequired,
-      isAuthorized: bool.isRequired,
+      isAuthenticated: bool.isRequired,
       isFetched: bool.isRequired,
       _id: string,
       name: string,
@@ -64,7 +64,7 @@ export default class Root extends Component {
   };
 
   renderIconElement = () => {
-    const { props: { user: { isStored, isAuthorized, isFetched } } } = this;
+    const { props: { user: { isStored, isAuthenticated, isFetched } } } = this;
 
     if (isStored && isFetched) {
       return (
@@ -75,7 +75,7 @@ export default class Root extends Component {
           color="white"
         />
       );
-    } else if (isAuthorized) {
+    } else if (isAuthenticated) {
       return <User />;
     }
 
