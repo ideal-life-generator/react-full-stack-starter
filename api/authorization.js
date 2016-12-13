@@ -1,9 +1,11 @@
 import passport from 'passport';
 import Strategy from 'passport-strategy';
-// import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import jsonwebtoken from 'jsonwebtoken';
 import ExtendableError from 'es6-error';
-import { secret } from '../config';
+import { secret, googleClientId } from '../config';
+
+const GOOGLE_CLIENT_SECRET = 'ccvqAqqEsluc5Ha1P8ZkXU1F';
 
 export class AuthorizationError extends ExtendableError {
   name = 'AuthorizationError';
@@ -51,6 +53,23 @@ class JWTRefreshToken extends Strategy {
 }
 
 passport.use(new JWTRefreshToken());
+
+passport.use(new GoogleStrategy({
+  clientID: googleClientId,
+  clientSecret: GOOGLE_CLIENT_SECRET,
+}, (accessToken, refreshToken, profile, done) => {
+  const {
+    displayName: name,
+    emails: [{ value: email }],
+  } = profile;
+
+  const user = {
+    name,
+    email,
+  };
+
+  done(null, user);
+}));
 
 export function checkJWTToken(req, res, next) {
   return new Promise((resolve, reject) => {

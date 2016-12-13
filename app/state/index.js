@@ -5,6 +5,7 @@ import { reducer as form } from 'redux-form';
 import ui from './ui';
 import users from './users';
 import user from './user';
+import oauth2 from './oauth2';
 
 export default combineReducers({
   routing: routerReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
   ui,
   users,
   user,
+  oauth2,
 });

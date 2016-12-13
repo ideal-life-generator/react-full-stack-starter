@@ -1,4 +1,5 @@
 import { SubmissionError } from 'redux-form';
+import cookie from 'react-cookie';
 import createReducer from './utils/create-reducer';
 import createAction from './utils/create-action';
 import createAsyncAction from './utils/create-async-action';
@@ -18,8 +19,8 @@ export const setUser = createAction(SET_USER, 'user');
 export const reset = createAction(RESET_USER);
 
 export function storeUser({ _id, name, refreshToken, token }) {
-  localStorage.setItem('refresh-token', refreshToken);
-  localStorage.setItem('token', token);
+  cookie.save('refresh-token', refreshToken);
+  cookie.save('token', token);
 
   return dispatch => dispatch(setUser({ _id, name }));
 }
@@ -57,24 +58,21 @@ export async function signup(values, dispatch) {
 }
 
 export function logout() {
-  localStorage.removeItem('refresh-token');
-  localStorage.removeItem('token');
+  cookie.remove('refresh-token');
+  cookie.remove('token');
 
   return dispatch => dispatch(reset());
 }
 
-const me = createAsyncAction([
+export const me = createAsyncAction([
   REQUEST_ME,
   ME_SUCCESS_RESPONSE,
   ME_RESPONSE_FAILURE,
 ], async () => {
   try {
-    return await axios('user/me');
+    return await axios('users/me');
   } catch (error) {
     const { response: { data } } = error;
-
-    localStorage.removeItem('refresh-token');
-    localStorage.removeItem('token');
 
     throw {
       _error: data,
@@ -82,17 +80,17 @@ const me = createAsyncAction([
   }
 });
 
-export function checkUserToken() {
-  const refreshToken = localStorage.getItem('refresh-token');
-  const token = localStorage.getItem('token');
+export function checkStoredUser() {
+  const refreshToken = cookie.load('refresh-token');
+  const token = cookie.load('token');
 
   if (token || refreshToken) {
     setDefaultHeader('Authorization', token);
 
-    return (dispatch) => {
+    return async (dispatch) => {
       dispatch(setStored());
 
-      dispatch(me());
+      await dispatch(me());
     };
   }
 

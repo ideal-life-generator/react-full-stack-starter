@@ -8,8 +8,8 @@ import CircularProgress from 'material-ui/CircularProgress';
 import User from './User';
 import Authorization from './Authorization';
 import MainMenuItem from '../components/MainMenuItem';
-import * as uiActions from '../reducers/ui';
-import { checkUserToken } from '../reducers/user';
+import * as uiActions from '../state/ui';
+import { checkStoredUser } from '../state/user';
 import styles from '../styles/root.scss';
 
 const { bool, string, func, shape, arrayOf, element } = PropTypes;
@@ -19,8 +19,10 @@ const { bool, string, func, shape, arrayOf, element } = PropTypes;
     const { user: { isAuthenticated } } = getState();
 
     if (!isAuthenticated) {
-      return dispatch(checkUserToken());
+      return dispatch(checkStoredUser());
     }
+
+    return undefined;
   },
 }])
 

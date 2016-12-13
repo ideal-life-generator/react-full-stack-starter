@@ -14,7 +14,7 @@ export default (error, defaultMessage) => {
     const validationErrors = Object.keys(errors).reduce((errorObject, fieldName) => {
       const { [fieldName]: { message: filedMessage } } = errors;
 
-      return Object.assign(errorObject, { [fieldName]: filedMessage });
+      return { ...errorObject, [fieldName]: filedMessage };
     }, {});
 
     return {

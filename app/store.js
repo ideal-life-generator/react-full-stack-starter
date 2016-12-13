@@ -2,8 +2,8 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { browserHistory } from 'react-router';
 import { routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
-import fetchMiddleware from './reducers/utils/fetch-middleware';
-import reducers from './reducers';
+import fetchMiddleware from './state/utils/fetch-middleware';
+import reducers from './state';
 
 const { env: { NODE_ENV, RENDERING_ON } } = process;
 
@@ -28,8 +28,8 @@ export default (initialState = {}) => {
     initialState,
     generateCompose(
       applyMiddleware(
-        fetchMiddleware,
         thunk,
+        fetchMiddleware,
         routerMiddleware(browserHistory),
       ),
     ),
@@ -37,8 +37,8 @@ export default (initialState = {}) => {
 
   if (NODE_ENV === 'development' && RENDERING_ON === 'client') {
     if (module.hot) {
-      module.hot.accept('./reducers', () => {
-        const nextReducers = require('./reducers').default;
+      module.hot.accept('./state', () => {
+        const nextReducers = require('./state').default;
 
         store.replaceReducer(nextReducers);
       });

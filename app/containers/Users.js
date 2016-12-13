@@ -6,7 +6,7 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
-import { load as loadUsers } from '../reducers/users';
+import { load as loadUsers } from '../state/users';
 import styles from '../styles/users.scss';
 
 const { bool, string, func, arrayOf, shape } = PropTypes;

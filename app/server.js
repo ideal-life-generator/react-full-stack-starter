@@ -7,6 +7,7 @@ import { renderToString } from 'react-dom/server';
 import { match } from 'react-router';
 import { Provider } from 'react-redux';
 import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
+import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import routes from './routes';
@@ -51,6 +52,8 @@ app.get('*', (req, res, next) => {
         res.redirect(redirectPath);
       } else if (props) {
         const { headers: { 'user-agent': userAgent } } = req;
+
+        cookie.plugToRequest(req, res);
 
         const store = initStore();
         const theme = initTheme(userAgent);

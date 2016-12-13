@@ -1,7 +1,8 @@
+**/*.html
 node_modules
 webpack-api.js
 webpack-base.js
 webpack-client.js
 webpack-server.js
 postcss.config.js
-dist
+build

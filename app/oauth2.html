@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OAuth2</title>
+  <script>
+    const url = location.href;
+    const message = {};
+
+    if (url.includes('action')) {
+      Object.assign(message, { action: url.replace(/^.*action=([^&]+).*$/, '$1') });
+    }
+
+    if (url.includes('code')) {
+      Object.assign(message, { code: url.replace(/^.*code=([^&]+).*$/, '$1') });
+    }
+
+    if (url.includes('error')) {
+      Object.assign(message, { error: url.replace(/^.*error=([^&]+).*$/, '$1') });
+    }
+
+    if (opener) {
+      opener.postMessage(message, location.origin);
+    } else {
+      console.warn('Use this page as authorization popup only');
+    }
+
+    window.close();
+  </script>
+</head>
+</html>

@@ -68,6 +68,7 @@ const client = smart(base, {
     new CommonsChunkPlugin('packages', 'commons.js'),
     new CopyWebpackPlugin([
       { from: 'index.html', to: 'index.html' },
+      { from: 'oauth2.html', to: 'oauth2.html' },
     ]),
     new SourceMapDevToolPlugin({
       include: 'client',

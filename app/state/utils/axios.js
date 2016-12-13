@@ -1,4 +1,5 @@
 import { create } from 'axios';
+import cookie from 'react-cookie';
 import { apiHost, apiPort } from '../../../config';
 
 function generateBaseURL() {
@@ -42,11 +43,11 @@ axios.interceptors.response.use(undefined, async (error) => {
 
     if (status === 401 && data === 'Invalid token') {
       try {
-        const refreshToken = localStorage.getItem('refresh-token');
+        const refreshToken = cookie.load('refresh-token');
 
         const { data: { token } } = await axios.post('/createToken', { refreshToken });
 
-        localStorage.setItem('token', token);
+        cookie.save('token', token);
 
         setDefaultHeader('token', token);
 
@@ -54,8 +55,8 @@ axios.interceptors.response.use(undefined, async (error) => {
 
         return await axios(config);
       } catch (createTokenError) {
-        localStorage.removeItem('refresh-token');
-        localStorage.removeItem('token');
+        cookie.remove('refresh-token');
+        cookie.remove('token');
       }
     }
   }

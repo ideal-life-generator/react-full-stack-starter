@@ -3,7 +3,7 @@ export default (type, ...argNames) => (...args) => {
     const { [index]: argName } = argNames;
     const { [index]: argValue } = args;
 
-    return Object.assign(container, { [argName]: argValue });
+    return { ...container, [argName]: argValue };
   }, {});
 
   return {

@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import FormField from '../components/FormField';
-import { login } from '../reducers/user';
+import { login } from '../state/user';
 import { loginValidation } from '../../utils/is';
 import styles from '../styles/login.scss';
 

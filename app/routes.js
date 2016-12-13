@@ -15,4 +15,4 @@ export default (
   </Route>
 );
 
-// https://github.com/joshgeller/react-redux-jwt-auth-example/blob/master/src/components/AuthenticatedComponent.js
+// https://github.com/acdlite/redux-router

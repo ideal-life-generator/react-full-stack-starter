@@ -1,23 +1,34 @@
-import React, { Component, PropTypes } from 'react' ;
+import React, { Component, PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
+import Divider from 'material-ui/Divider';
+import CircularProgress from 'material-ui/CircularProgress';
 import FormField from '../components/FormField';
-import { signup } from '../reducers/user';
+import GooglePlusIcon from '../components/GooglePlusIcon';
+import { signup } from '../state/user';
+import * as oauth2Actions from '../state/oauth2';
 import { signupValidation } from '../../utils/is';
+import createPopup from '../utils/popup';
+import { url, googleClientId } from '../../config';
 import styles from '../styles/signup.scss';
 
-const { bool, string, func } = PropTypes;
+const redirectUrl = `${url}/oauth2.html?action=google`;
 
-@connect(() => ({
-  initialValues: {
-    name: 'Tkachenko Vladislav',
-    email: 'ideal.life.generator@gmail.com',
-    password: 'test password',
-    feedback: 'It\'s fine!',
-  },
-}))
+const googleOAuth2Url = 'https://accounts.google.com/o/oauth2/v2/auth?'
+  + 'response_type=code&'
+  + `client_id=${googleClientId}&`
+  + `redirect_uri=${redirectUrl}&`
+  + 'scope=https://www.googleapis.com/auth/plus.login&'
+  + 'prompt=consent&'
+  + 'include_granted_scopes=true&'
+  + 'access_type=online&';
+
+const { bool, string, func, object, shape } = PropTypes;
+
+@connect(({ oauth2 }) => ({ oauth2 }), dispatch => bindActionCreators(oauth2Actions, dispatch))
 
 @reduxForm({
   form: 'signup',
@@ -30,10 +41,50 @@ export default class Signup extends Component {
     submitting: bool.isRequired,
     submitFailed: bool.isRequired,
     error: string,
+    oauth2: shape({
+      google: shape({
+        isFetched: bool.isRequired,
+        isFailure: bool.isRequired,
+        errorData: object,
+      }).isRequired,
+    }).isRequired,
   };
 
+  componentDidMount() {
+    const { oAuth2MessageHandler } = this;
+
+    window.addEventListener('message', oAuth2MessageHandler);
+  }
+
+  componentWillUnmount() {
+    const { oAuth2MessageHandler, state: { googleOAuth2Popup } } = this;
+
+    if (googleOAuth2Popup) {
+      googleOAuth2Popup.close();
+
+      this.setState({ googleOAuth2Popup: null });
+    }
+
+    window.removeEventListener('message', oAuth2MessageHandler);
+  }
+
+  oAuth2MessageHandler = ({ origin, data }) => {
+    if (origin === url) {
+      const { action, code } = data;
+      const { props: { [action]: oauth2Action } } = this;
+
+      oauth2Action(action, { origin: redirectUrl, code });
+    }
+  }
+
+  googleOAuth2 = () => {
+    this.setState({
+      googleOAuth2Popup: createPopup(googleOAuth2Url, { width: 450, height: 450 }),
+    });
+  }
+
   render() {
-    const { props: { handleSubmit, submitting, submitFailed, error } } = this;
+    const { googleOAuth2, props: { handleSubmit, submitting, submitFailed, error, oauth2 } } = this;
 
     return (
       <section className={styles.signup}>
@@ -74,7 +125,17 @@ export default class Signup extends Component {
             label="Submit"
             onTouchTap={handleSubmit(signup)}
             disabled={submitting}
-            style={{ color: 'black' }}
+            primary
+          />
+          <br />
+          <Divider style={{ width: '100%' }} />
+          <br />
+          <RaisedButton
+            label="Google"
+            labelPosition="before"
+            icon={oauth2.google.isFetched ? <CircularProgress size={24} /> : <GooglePlusIcon />}
+            onTouchTap={googleOAuth2}
+            disabled={submitting}
             primary
           />
         </form>

@@ -23,8 +23,8 @@ api.use(passport.initialize());
 
 api.use(async (req, res, next) => {
   try {
-    const { url, method, body } = req;
-    const handler = parseQuery(queries, url, method);
+    const { path, method, body } = req;
+    const handler = parseQuery(queries, path, method);
     const { secured, validate } = handler;
 
     if (secured) {
