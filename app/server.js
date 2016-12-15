@@ -20,18 +20,18 @@ import './styles/common.scss';
 
 const { env: { NODE_ENV } } = process;
 
-const app = express();
+const server = express();
 
-app.use(compression());
-app.use(cors());
-app.use(express.static(resolve('build')));
+server.use(compression());
+server.use(cors());
+server.use(express.static(resolve('build')));
 
 injectTapEventPlugin();
 
-function renderPage(appHtml, initialState) {
+function renderPage(html, initialState) {
   return (
     indexHtml
-      .replace('<!-- APP_HTML -->', appHtml)
+      .replace('<!-- HTML -->', html)
       .replace('<!-- INITIAL_STATE -->', `
         <script>
           window.INITIAL_STATE = ${JSON.stringify(initialState)};
@@ -40,7 +40,7 @@ function renderPage(appHtml, initialState) {
   );
 }
 
-app.get('*', (req, res, next) => {
+server.get('*', (req, res, next) => {
   match({ routes, location: req.url }, async (routerError, redirect, props) => {
     try {
       if (routerError) {
@@ -84,6 +84,6 @@ app.get('*', (req, res, next) => {
   });
 });
 
-app.listen(serverPort, () => {
+server.listen(serverPort, () => {
   console.log(`Rendering server is listen on ${serverPort} port in ${NODE_ENV} mode.`);
 });

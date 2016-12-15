@@ -11,9 +11,9 @@ const { env: { NODE_ENV } } = process;
 
 const server = smart(base, {
   target: 'node',
-  context: resolve('./app'),
+  context: resolve('./'),
   entry: {
-    server: './server',
+    server: './app/server',
   },
   module: {
     loaders: [
@@ -55,7 +55,7 @@ const server = smart(base, {
   externals: [nodeExternals()],
   devtool: '#source-map',
   plugins: [
-    new BannerPlugin(`require('source-map-support').install();`, { raw: true, entryOnly: false }),
+    new BannerPlugin('require(\'source-map-support\').install();', { raw: true, entryOnly: false }),
   ],
 });
 

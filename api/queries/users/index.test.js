@@ -30,17 +30,19 @@ suite('/users', () => {
     const {
       body: {
         collection,
-        collection: {
-          0: { _id, name, email, password, feedback },
-        },
+        // collection: {
+        //   0: { _id, name, email, password, feedback },
+        // },
       },
     } = await api.get('/users').expect(200);
+
+    const { name: testName } = testData.get('user');
+
+    const { _id, name, feedback } = collection.find(({ name: testNameFromCollection }) => testNameFromCollection === testName);
 
     collection.should.be.a.Array();
     _id.should.be.a.String();
     name.should.be.a.String();
-    // should.not.exist(email);
-    // should.not.exist(password);
     feedback.should.be.a.String();
   });
 });

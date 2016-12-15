@@ -16,7 +16,7 @@ const api = smart(base, {
   externals: [nodeExternals()],
   devtool: '#source-map',
   plugins: [
-    new BannerPlugin(`require('source-map-support').install();`, { raw: true, entryOnly: false }),
+    new BannerPlugin('require(\'source-map-support\').install();', { raw: true, entryOnly: false }),
   ],
 });
 

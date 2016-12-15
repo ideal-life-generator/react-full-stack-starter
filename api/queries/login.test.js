@@ -70,7 +70,7 @@ suite('/login', () => {
       });
   });
 
-  test('Authorization failed', async () => {
+  test('Authentication failed', async () => {
     const { email, password } = testData.get('failedLoginForm');
 
     await api.post('/login')

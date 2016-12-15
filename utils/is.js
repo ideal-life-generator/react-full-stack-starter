@@ -31,6 +31,7 @@ export const name = is(required, minLength(2));
 export const email = is(required, validEmail);
 export const password = is(required, minLength(6));
 export const refreshToken = is(required);
+export const code = is(required);
 
 export const signupValidation = createValidation({
   name,
@@ -45,4 +46,8 @@ export const loginValidation = createValidation({
 
 export const createTokenValidation = createValidation({
   refreshToken,
+});
+
+export const googleOAuth2Validation = createValidation({
+  code,
 });

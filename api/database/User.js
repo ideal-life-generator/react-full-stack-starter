@@ -12,7 +12,6 @@ const userSchema = Schema({
   },
   email: {
     type: String,
-    required: [true, 'Required'],
     validate: {
       validator: value => isEmail(value),
       message: 'Invalid',
@@ -26,6 +25,7 @@ const userSchema = Schema({
     minlength: [6, 'Must be 6 characters or more'],
   },
   feedback: String,
+  google: String,
 });
 
 userSchema.plugin(uniqueValidator, { message: 'Already in use' });

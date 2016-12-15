@@ -8,7 +8,8 @@ import parseQuery from './utils/parse-query';
 import parseError from './utils/parse-error';
 import { throwIfInvalid } from '../utils/is-core';
 import * as queries from './queries';
-import { checkJWTToken } from './authorization';
+import * as models from './database';
+import authenticate from './auth';
 
 const { env: { NODE_ENV } } = process;
 
@@ -24,20 +25,20 @@ api.use(passport.initialize());
 api.use(async (req, res, next) => {
   try {
     const { path, method, body } = req;
-    const handler = parseQuery(queries, path, method);
-    const { secured, validate } = handler;
+    const query = parseQuery(queries, path, method);
+    const { secured, validate } = query;
 
-    if (secured) {
-      const user = await checkJWTToken(req, res, next);
-
-      Object.assign(req, { user });
-    }
+    const user = secured && authenticate(req);
 
     if (validate) {
       throwIfInvalid(validate(body));
     }
 
-    res.send(await handler(req, res, next));
+    const response = await query({ req, res, next, models, user });
+
+    if (response) {
+      res.send(response);
+    }
   } catch (error) {
     const { status, data } = parseError(error, 'Not found');
 

@@ -1,5 +1,5 @@
 import api from '../index.test';
-import { createRefreshToken, checkRefreshToken } from '../authorization';
+import { createRefreshToken, checkRefreshToken } from '../auth';
 
 const testData = new Map();
 

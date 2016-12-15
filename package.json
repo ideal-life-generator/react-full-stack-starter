@@ -126,6 +126,7 @@
     "redux-form": "^6.2.1",
     "redux-thunk": "^2.1.0",
     "serve-favicon": "^2.3.2",
+    "source-map-support": "^0.4.6",
     "validator": "^6.2.0"
   }
 }

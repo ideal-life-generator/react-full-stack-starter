@@ -1,7 +1,7 @@
 import { Error } from 'mongoose';
 import { QueryError } from './parse-query';
 import { IsInvalidError } from '../../utils/is-core';
-import { AuthorizationError } from '../authorization';
+import { AuthError } from '../auth';
 
 const { ValidationError } = Error;
 
@@ -33,7 +33,7 @@ export default (error, defaultMessage) => {
       status: 400,
       data: errors,
     };
-  } else if (error instanceof AuthorizationError) {
+  } else if (error instanceof AuthError) {
     return {
       status: 401,
       data: message,

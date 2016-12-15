@@ -1,7 +1,7 @@
-import { checkRefreshToken, createToken, AuthorizationError } from '../authorization';
+import { checkRefreshToken, createToken, AuthError } from '../auth';
 import { createTokenValidation } from '../../utils/is';
 
-export async function POST({ body: { refreshToken } }) {
+export async function POST({ req: { body: { refreshToken } } }) {
   try {
     const payload = checkRefreshToken(refreshToken);
 
@@ -9,7 +9,7 @@ export async function POST({ body: { refreshToken } }) {
       token: createToken(payload),
     };
   } catch (error) {
-    throw new AuthorizationError('Invalid refresh token');
+    throw new AuthError('Invalid refresh token');
   }
 }
 

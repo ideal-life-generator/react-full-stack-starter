@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 import api from '../../index.test';
 import User from '../../database/User';
-import { createToken } from '../../authorization';
+import { createToken } from '../../auth';
 
 const { ObjectId } = Types;
 

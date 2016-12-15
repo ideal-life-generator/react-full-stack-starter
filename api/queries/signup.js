@@ -1,16 +1,16 @@
 import User from '../database/User';
-import { createRefreshToken, createToken } from '../authorization';
+import { createRefreshToken, createToken } from '../auth';
 import { signupValidation } from '../../utils/is';
 
-export async function POST({ body: { name, email, password, feedback } }) {
-  const newUser = await User.create({ name, email, password, feedback });
+export async function POST({ req: { body: { name, email, password, feedback } } }) {
+  const user = await User.create({ name, email, password, feedback });
 
-  const newUserPublic = newUser.public();
+  const userPublic = user.public();
 
-  const { _id } = newUserPublic;
+  const { _id } = userPublic;
 
   return {
-    ...newUserPublic,
+    ...userPublic,
     refreshToken: createRefreshToken({ _id }),
     token: createToken({ _id }),
   };

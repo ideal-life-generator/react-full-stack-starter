@@ -35,8 +35,6 @@ suite('/signup', () => {
 
     _id.should.be.a.String();
     name.should.be.exactly(signupForm.name);
-    // should.not.exist(email);
-    // should.not.exist(password);
     feedback.should.be.exactly(signupForm.feedback);
     refreshToken.should.be.a.String();
     token.should.be.a.String();

@@ -15,7 +15,7 @@ export default ({ dispatch }) => next => async (action) => {
     try {
       dispatch({ type: REQUEST_TYPE });
 
-      const response = await request(...payload);
+      const response = await request(...payload, dispatch);
 
       dispatch({ type: SUCCESS_TYPE, response });
     } catch (error) {

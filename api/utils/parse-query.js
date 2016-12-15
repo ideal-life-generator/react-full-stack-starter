@@ -10,12 +10,12 @@ export default (queries, url, method) => {
     const queryParts = queryUrl.split('/');
     const queryMethods = queryParts.reduce((currentQuery, path) => currentQuery[path], queries);
 
-    const { default: defaultHandler, [method]: handler } = queryMethods;
+    const { default: defaultQuery, [method]: query } = queryMethods;
 
-    if (method === 'GET' && typeof defaultHandler === 'function') {
-      return defaultHandler;
-    } else if (typeof handler === 'function') {
-      return handler;
+    if (method === 'GET' && typeof defaultQuery === 'function') {
+      return defaultQuery;
+    } else if (typeof query === 'function') {
+      return query;
     }
 
     throw new Error();
