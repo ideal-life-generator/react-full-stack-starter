@@ -12,7 +12,7 @@ import * as uiActions from '../state/ui';
 import { checkStoredUser } from '../state/user';
 import styles from '../styles/root.scss';
 
-const { bool, string, func, shape, arrayOf, element } = PropTypes;
+const { bool, string, func, shape, element } = PropTypes;
 
 @asyncConnect([{
   promise({ store: { getState, dispatch } }) {
@@ -40,10 +40,6 @@ const { bool, string, func, shape, arrayOf, element } = PropTypes;
 export default class Root extends Component {
   static propTypes = {
     children: element.isRequired,
-    linksSettings: arrayOf(shape({
-      to: string.isRequired,
-      description: string.isRequired,
-    }).isRequired).isRequired,
     mainMenuOpened: bool.isRequired,
     openMainMenu: func.isRequired,
     closeMainMenu: func.isRequired,
@@ -62,6 +58,7 @@ export default class Root extends Component {
       { to: '/users', description: 'Users' },
       { to: '/login', description: 'Login' },
       { to: '/signup', description: 'Signup' },
+      { to: '/profile', description: 'Profile' },
     ],
   };
 
@@ -92,7 +89,7 @@ export default class Root extends Component {
         openMainMenu,
         closeMainMenu,
         mainMenuOpened,
-        linksSettings,
+        user: { isAuthenticated },
       },
     } = this;
 
@@ -107,7 +104,11 @@ export default class Root extends Component {
           onRequestChange={closeMainMenu}
           docked={false}
         >
-          {linksSettings.map((linkSettings, index) => (<MainMenuItem key={index} {...linkSettings} onTouchTap={closeMainMenu} />))}
+          <MainMenuItem to="/" description="Home" onTouchTap={closeMainMenu} />
+          <MainMenuItem to="/users" description="Users" onTouchTap={closeMainMenu} />
+          {!isAuthenticated && <MainMenuItem to="/login" description="Login" onTouchTap={closeMainMenu} />}
+          {!isAuthenticated && <MainMenuItem to="/signup" description="Signup" onTouchTap={closeMainMenu} />}
+          {isAuthenticated && <MainMenuItem to="/profile" description="Profile" onTouchTap={closeMainMenu} />}
         </Drawer>
         {children}
       </div>
